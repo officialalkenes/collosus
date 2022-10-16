@@ -19,4 +19,4 @@ repos:
     rev: v2.3.0
     hooks:
     -   id: flake8
-        exclude: test_*
+        exclude: test_*, urls*.py, forms.py
