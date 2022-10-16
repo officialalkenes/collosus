@@ -30,7 +30,7 @@ DJANGO_APPS = [
 ]
 
 CUSTOM_APPS = [
-    "apps.user.apps.UserConfig",
+    "apps.user",
 ]
 
 THIRD_PARTY_APPS = []
