@@ -7,7 +7,7 @@ from django.urls import include, path
 urlpatterns = [
     path("superaccess/", admin.site.urls),
     # path('', include('investment.urls', namespace='investment')),
-    path("accounts/", include("user.urls", namespace="accounts")),
+    path("accounts/", include("users.urls", namespace="accounts")),
     path("accounts/", include("django.contrib.auth.urls")),
     # path('profiles/', include('profiles.urls', namespace='profiles')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

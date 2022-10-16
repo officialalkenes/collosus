@@ -18,8 +18,8 @@ from .views import (
     my_login_page,
     user_update,
     logout_view,
-    signup_page,
-    referral_view,
+    # signup_page,
+    # referral_view,
 )
 
 
@@ -27,8 +27,8 @@ app_name = "accounts"
 
 
 urlpatterns = [
-    path("signup/", signup_page, name="signup"),
-    path("<str:code>/", referral_view, name="ref-view"),
+    # path("signup/", signup_page, name="signup"),
+    # path("<str:code>/", referral_view, name="ref-view"),
     path("<pk>/profile-updating/", user_update, name="profile-updating"),
     path(
         "activate/<slug:uidb64>/<slug:token>/", activate_account_page, name="activate"

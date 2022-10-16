@@ -29,13 +29,14 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-CUSTOM_APPS = [
-    "apps.user",
+LOCAL_APPS = [
+    "users",
 ]
 
 THIRD_PARTY_APPS = []
 
-INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -51,7 +52,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -128,4 +129,5 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "user.User"
+AUTH_USER_MODEL = "users.User"
+AUTHENTICATION_BACKENDS = ["users.backends.EmailBackend"]  # new

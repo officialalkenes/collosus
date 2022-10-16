@@ -108,20 +108,22 @@ def logout_view(request):
     return redirect("user:login")
 
 
-# @login_required
-# def user_update(request, pk):
-#     context ={}
-#     obj = get_object_or_404(Profile, id=pk)
-#     form = UserEditForm()
-#     if request.method == 'POST':
-#         form = UserEditForm(request.POST, request.FILES, instance = obj)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "User Profile Information Has been Updated Successfully")
-#             return redirect('investment:user-profiles')
+@login_required
+def user_update(request, pk):
+    context = {}
+    obj = get_object_or_404(User, id=pk)
+    form = UserEditForm()
+    if request.method == "POST":
+        form = UserEditForm(request.POST, request.FILES, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request, "User Profile Information Has been Updated Successfully"
+            )
+            return redirect("investment:user-profiles")
 
-#     context["form"] = form
-#     return render(request, "user/create-profiles.html", context)
+    context["form"] = form
+    return render(request, "user/create-profiles.html", context)
 
 
 @login_required
