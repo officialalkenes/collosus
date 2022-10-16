@@ -12,31 +12,32 @@ from django.dispatch import receiver
 
 from django.utils.text import slugify
 
-from .models import *
+from investment.models import Portfolio
 
-# from profiles.models import Profile
+from .models import User, UserActivity
+
+from profiles.models import Profile
+
 # from investment.models import Portfolio
 
 
-# @receiver(post_save, sender=User)
-# def post_save_profile_receiver(sender, instance, created, **kwargs):
-#     if created:
-#         Portfolio.objects.create(
-#             user=instance)
-#         Profile.objects.create(
-#                 user=instance)
+@receiver(post_save, sender=User)
+def post_save_profile_receiver(sender, instance, created, **kwargs):
+    if created:
+        Portfolio.objects.create(user=instance)
+        Profile.objects.create(user=instance)
 
 
-# @receiver(user_logged_in)
-# def register_login(sender, user, request, **kwargs):
-#     UserActivity.objects.create(user=user, session_key=request.session.session_key)
+@receiver(user_logged_in)
+def register_login(sender, user, request, **kwargs):
+    UserActivity.objects.create(user=user, session_key=request.session.session_key)
 
 
-# @receiver(user_logged_out)
-# def register_logout(sender, user, request, **kwargs):
-#     UserActivity.objects.filter(
-#         user=user, session_key=request.session.session_key
-#     ).update(logout=Now())
+@receiver(user_logged_out)
+def register_logout(sender, user, request, **kwargs):
+    UserActivity.objects.filter(
+        user=user, session_key=request.session.session_key
+    ).update(logout=Now())
 
 
 @receiver(user_logged_in)

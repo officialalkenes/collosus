@@ -1,0 +1,14 @@
+  {% if form.errors %}
+    <ul class="user-msg error">
+    {% for field in form %}
+        {% for error in field.errors %}
+            <li>
+              {% if field != '__all__' %}
+                <strong>{{ field.label }}:</strong>
+              {% endif %}
+              {{ error }}
+            </li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+{% endif %}

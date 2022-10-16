@@ -1,0 +1,79 @@
+{% extends 'investicon/dashboard.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Withdrawal History</h6>
+            </div>
+
+    <div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Withdrawal Records</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            {% if records %}
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Transaction Id</th>
+                        <th>Status</th>
+                        <th>Deposited Wallet</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in records %}
+                    <tr>
+                        <td>{{data.amount}}</td>
+                        <td>{{data.trx}}</td>
+                        <td>{{data.status}}</td>
+                        {% if records.payment == 'BTC' %}
+                        <td>{{request.profile.btc_wallet}}</td>
+                        {% elif records.payment == 'ETH' %}
+                        <td>{{request.profile.eth_wallet}}</td>
+                        {% else %}
+                        <td>{{request.profile.trx_wallet}}</td>
+                        {% endif %}
+                        <td>{{data.created}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <h6 class='text-secondary'>Unfortunately, You Have No Withdrawal Records</h6>
+            {% endif %}
+        </div>
+    </div>
+</div>
+            </div>
+            <div class="col-xl-4 col-lg-7">
+                <div class="card shadow mb-4">
+                    <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-danger">Withdraw Now</h6>
+                </div>
+                <div class=''>
+                    <div class='centered'>
+                        <h6 class='text-secondary'> You can easily withdraw your funds using this link. Be sure to have the minimum withdrawal in your Portfolio<span class='text-info font-weight-bold'> <a href="{% url 'investment:create-withdrawal' %}" class="d-none d-sm-inline-block shadow-md">
+                            Link </a></span>
+                         Or Reach out to us Through the <span class='text-info font-weight-bold'>Chat Support widget.</span></h6>
+                        </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- /.container-fluid -->
+
+{% endblock content %}

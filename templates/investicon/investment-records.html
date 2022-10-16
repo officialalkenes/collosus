@@ -1,0 +1,110 @@
+{% extends 'investicon/dashboard.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Investment Records</h6>
+            </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Investment Records</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                {% include 'messages.html' %}
+                {% if records %}
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Transaction Id</th>
+                            <th>Amount</th>
+                            <th>Investment  Type</th>
+                            <th>Percentage</th>
+                            <th>Total Days</th>
+                            <th>Status</th>
+                            <th>Profit Estimate</th>
+                            <th>Created on</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in records %}
+                        <tr>
+                            <td>{{data.trxid}}</td>
+                            <td>{{data.amount}}</td>
+                            <td>{{data.investment_type}}</td>
+                            <td>{{data.percentage}}</td>
+                            <td>{{data.total_days}}</td>
+                            <td>{{data.status}}</td>
+                            <td>{{data.profit}}</td>
+                            <td>{{data.start_date}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% elif %}
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Transaction Id</th>
+                            <th>Amount</th>
+                            <th>Investment  Type</th>
+                            <th>Percentage</th>
+                            <th>Total Days</th>
+                            <th>Status</th>
+                            <th>Profit Estimate</th>
+                            <th>Created on</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in admin %}
+                        <tr>
+                            <td>{{data.trxid}}</td>
+                            <td>{{data.amount}}</td>
+                            <td>{{data.investment_type}}</td>
+                            <td>{{data.percentage}}</td>
+                            <td>{{data.total_days}}</td>
+                            <td>{{data.status}}</td>
+                            <td>{{data.profit}}</td>
+                            <td>{{data.start_date}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <h6 class='text-secondary'>Unfortunately, You Have No Local Transfer Records</h6>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+            </div>
+            <div class="col-xl-4 col-lg-7">
+                <div class="card shadow mb-4">
+                    <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-danger">Invest Now</h6>
+                </div>
+                <div class=''>
+                    <div class='centered'>
+                        <h6 class='text-secondary'> You can Apply for loan using this <span class='text-info font-weight-bold'> <a href="{% url 'investment:dashboard' %}" class="d-none d-sm-inline-block shadow-md">
+                            Support </a></span>
+                         Or Reach out to us Through the <span class='text-info font-weight-bold'>Chat Support widget.</span></h6>
+
+                        </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- /.container-fluid -->
+
+{% endblock content %}

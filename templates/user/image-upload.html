@@ -1,0 +1,108 @@
+{% extends 'reg.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="{% static 'img/signup.svg' %}"
+          class="img-fluid" alt="Sample image">
+      </div>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form action='' method='POST' enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+            <h2 class="form-title fw-normal mb-0 me-3">Change User Profile</h2>
+          </div>
+
+          <div class="divider d-flex align-items-center my-4">
+            <p class="text-center fw-bold mx-3 mb-0"></p>
+          </div>
+          {% include 'messages.html' %}
+          {{form|crispy}}
+          {% comment %}
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            {{profile_form.date_of_birth}}
+            <label class="form-label" for="form3Example3">Date of Birth</label>
+          </div>
+
+          <div class="form-outline mb-4">
+            {{profile_form.current_address}}
+            <label class="form-label" for="form3Example3">Residential Address</label>
+          </div>
+
+            {{profile_form.phone_number}}
+            <div class="form-outline mb-4">
+            </div>
+
+            <p class="">Gender</p>
+              {{profile_form.gender}}
+
+              <div class="form-outline mb-4">
+              </div>
+
+
+                <div class="form-outline mb-4">
+                  {{profile_form.state_security}}
+                  <label class="form-label" for="form3Example3">State Security</label>
+                </div>
+
+                <div class="form-outline mb-4">
+                  {{profile_form.city}}
+                  <label class="form-label" for="form3Example3">City</label>
+                </div>
+
+
+              <div class="form-outline mb-4">
+                {{profile_form.postal_code}}
+                <label class="form-label" for="form3Example3">Postal Code</label>
+              </div>
+
+
+            <p class="">Country</p>
+            {{profile_form.country}}
+
+            <div class="form-outline mb-4">
+            </div>
+
+            <p class="">Security Questions</p>
+            {{my_security.security_questions}}
+
+            <p class="">Security Answers</p>
+            {{my_security.security_answers}}
+
+            <div class="form-outline mb-4">
+              {{my_security.transaction_pin}}
+              <label class="form-label" for="form3Example3">Transaction Pin</label>
+            </div> {% endcomment %}
+
+          <!-- Password input -->
+          <div class="text-center text-lg-start mt-4 pt-2">
+            <button type="submit" class="btn btn-primary btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem;">Next</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+  <div
+    class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
+    <!-- Copyright -->
+    <div class="text-white mb-3 mb-md-0">
+      Copyright © {{now.year}}. All rights reserved.
+    </div>
+    <!-- Copyright -->
+
+    <!-- Right -->
+  </div>
+</section>
+
+
+{% endblock content %}

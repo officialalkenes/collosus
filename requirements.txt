@@ -38,6 +38,12 @@ distlib==0.3.6
     #   -r requirements.in
     #   virtualenv
 django==4.0
+    # via
+    #   -r requirements.in
+    #   django-jazzmin
+django-countries==7.4.2
+    # via -r requirements.in
+django-jazzmin==2.5.0
     # via -r requirements.in
 filelock==3.8.0
     # via
@@ -78,6 +84,8 @@ pep517==0.13.0
     # via
     #   -r requirements.in
     #   build
+pillow==9.2.0
+    # via -r requirements.in
 pip-tools==6.8.0
     # via -r requirements.in
 platformdirs==2.5.2
@@ -123,6 +131,8 @@ pyyaml==6.0
     # via
     #   -r requirements.in
     #   pre-commit
+six==1.16.0
+    # via -r requirements.in
 sqlparse==0.4.3
     # via
     #   -r requirements.in
@@ -138,6 +148,10 @@ tomli==2.0.1
     #   build
     #   pep517
     #   pytest
+typing-extensions==4.4.0
+    # via
+    #   -r requirements.in
+    #   django-countries
 tzdata==2022.5
     # via
     #   -r requirements.in

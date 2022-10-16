@@ -1,0 +1,255 @@
+{% extends 'investicon/dashboard.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">My Profile Information</h6>
+                <a href="{{request.user.get_absolute_url}}" class="m-0 btn-sm btn-primary shadow-lg font-weight-bold">Update Profile Info</a>
+              </div>
+
+            {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+                <div class="card-body">
+                    <form>
+                        {% for data in profiler %}
+            <div class="row">
+
+                        <div class="col-md-5">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Customer Fullname</label>
+                            <input type="text" value="{{request.user.firstname}} {{request.user.lastname}}" class="form-control" disabled="">
+                        </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Gender</label>
+                            <input type="text" value="{{ data.gender}}" class="form-control" disabled="">
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Email address</label>
+                            <input type="email" value="{{request.user.email}}" disabled="disabled" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Referral Number</label>
+                            <input type="text" value="{{request.user.profile.code}}" disabled="disabled" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Date of Birth</label>
+                            <input type="text" class="form-control" value="{{ data.date_of_birth}}" disabled="disabled">
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">City/State</label>
+                            <input type="text" class="form-control" value="{{ data.city}}" disabled="disabled">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Residential Address</label>
+                            <input type="text" class="form-control" value="{{ data.address}}" disabled="disabled">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Preferred Currency</label>
+                            <input type="text" class="form-control" value="{{ data.state_security}}" disabled="disabled">
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Postal Code</label>
+                            <input type="text" class="form-control" value="{{data.postal_code}}" disabled="disabled">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Country</label>
+                            <input type="text" class="form-control" value="{{ data.country}}" disabled="">
+                          </div>
+                        </div>
+                        {% endfor %}
+                        <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Account Number</label>
+                            <input type="text" class="form-control" value="{{request.user.account_number}}&nbsp;{% for type in account %}({{type.account}}) {%endfor%}" disabled="disabled">
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Account Balance</label>
+                    <input type="text" class="form-control" {% for data in profiling %} value="USD&nbsp;{{data.balance}} {% endfor %}" disabled="disabled">
+                          </div>
+                        </div>
+                      </div>
+
+                      {% for info in employment %}
+                      <div
+                      class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                      <h6 class="m-0 font-weight-bold text-primary">Employment Details</h6>
+                      <a href="{{info.get_absolute_url}}" class="m-0 btn-sm btn-primary font-weight-bold ">Update Employment Details</a>
+                  </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Name, &amp; Address of Employer</label>
+                            <input type="text" class="form-control" value="{{info.name_addr}}" disabled="disabled">
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Nature of Employment</label>
+                            <input type="text" class="form-control" value="{{info.employment_type}}" disabled="">
+                          </div>
+                        </div>
+                       <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Estimated Salary Range</label>
+                            <input type="text" class="form-control" value="{{info.salary_range}}" disabled="disabled">
+                          </div>
+                        </div>
+                         {% endfor %}
+                         </div>
+
+
+                         {% for data in nextofkin %}
+                         <div
+                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                         <h6 class="m-0 font-weight-bold text-success">Registered Next Of Kin</h6>
+                         <a href="{{data.get_absolute_url}}" class="m-0 btn-sm btn-success font-weight-bold ">Update Next of Kin Details</a>
+                        </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Beneficiary Name</label>
+                            <input type="text" class="form-control" value="{{data.legal_name}}" disabled="disabled">
+                          </div>
+                        </div>
+
+                       <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Occupation</label>
+                            <input type="text" class="form-control" value="{{data.occupation}}" disabled="disabled">
+                          </div>
+                        </div>
+                          <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Beneficiary Email</label>
+                            <input type="text" class="form-control" value="{{data.email_address}}" disabled="">
+                          </div>
+                        </div>
+                         <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Beneficiary Mobile</label>
+                            <input type="text" class="form-control" value="{{data.phone_number}}" disabled="disabled">
+                          </div>
+                        </div>
+
+                       <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Relationship</label>
+                            <input type="text" class="form-control" value="{{data.relationship}}" disabled="disabled">
+                          </div>
+                        </div>
+                          <div class="col-md-4">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Beneficiary Age Bracket</label>
+                            <input type="text" class="form-control" value="{{data.age_range}}" disabled="">
+                          </div>
+                        </div>
+                        </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Residential Address of Next of Kin</label>
+                            <input type="text" class="form-control" value="{{data.address}}" disabled="disabled">
+                          </div>
+                        </div>
+                        {% endfor %}
+                      </div>
+
+                      {% for data in security %}
+                      <div
+                      class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                      <h6 class="m-0 font-weight-bold text-info">Security Details</h6>
+                      <a href="{{data.get_absolute_url}}" class="m-0 btn-sm btn-info font-weight-bold ">Update Security Details</a>
+                        </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Security Question</label>
+                            <input type="text" class="form-control" value="{{data.security_questions}}" disabled="disabled">
+                          </div>
+                        </div>
+
+                       <div class="col-md-6">
+                          <div class="form-group bmd-form-group is-filled">
+                            <label class="bmd-label-floating">Answer</label>
+                            <input type="text" class="form-control" value="{{data.security_answers}}" disabled="disabled">
+                          </div>
+                        </div>
+                        {% endfor %}
+                          </div>
+
+                      <br>
+
+                    <div class="clearfix"></div>
+                    </form>
+                  </div>
+
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-7">
+                <div class="card shadow mb-4">
+                    <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-danger">Important Notice</h6>
+                </div>
+                <div class=''>
+                    <div class='centered'>
+                        <h6 class='text-secondary'> If You have any Update to the information provided, Please contact our <span class='text-info font-weight-bold'> <a href="#" class="d-none d-sm-inline-block shadow-md">
+                            Support </a></span>
+                         Or Reach out to us Through the <span class='text-info font-weight-bold'>Chat Support widget.</span></h6>
+
+                        </div>
+                </div>
+
+        </div>
+{% comment %}
+      </div> {% endcomment %}
+
+<!-- /.container-fluid -->
+
+{% endblock content %}

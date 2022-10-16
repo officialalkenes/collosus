@@ -1,0 +1,70 @@
+{% extends 'investicon/dashboard.html' %}
+
+{% load static %}
+
+{% block content %}
+                    <div class="row">
+
+                        <!-- Area Chart -->
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Mini Account Statement</h6>
+                                        <p class="m-0 font-weight-normal text-primary">All Deposits Records are shown below   </p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Amount</th>
+                                                        <th>Status</th>
+                                                        <th>Created</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% if portfolio %}
+                                                    {% for data in portfolio %}
+                                                    <tr>
+                                                        <td>${{data.balance}}</td>
+                                                        <td>{{data.status}}</td>
+                                                        <td>{{data.created}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    {% else %}
+                                                    <p> You Have no Transaction Records yet </p>
+                                                    {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </div>
+
+
+                        <div class="col-lg-4 mb-4">
+
+                            <!-- Illustrations -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-danger">Fraud Alert</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 20rem; height: 10rem;"
+                                            src="{% static 'img/warning.svg' %}" alt="...">
+                                    </div>
+                                    <p><strong class='text-primary'>Cloud World Bank</strong> Will never ask you for your online bank details through email or phone number, Flee from such messages and requests.
+                                        Stay protected always, should you notice any suspicious activities on your account? Reach out to us Through support the widget</p>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+{% endblock content %}

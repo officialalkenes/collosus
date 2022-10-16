@@ -1,0 +1,12 @@
+{% extends 'investicon/dashboard.html' %}
+
+{% load static %}
+
+{% block content %}
+    <ul>
+    {% for user in total_ref %}
+    <li> {{user}} </li>
+    {% endfor %}
+    </ul>
+    {{ref_balance}}
+{% endblock content %}

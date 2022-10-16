@@ -1,0 +1,18 @@
+{% autoescape off %}
+Hi {{user.username}},
+
+Thank you for Signing up Cloud World Finance!
+Please confirm your email address by clicking the link below.
+We'll communicate important updates with you from time to time via email, so it's essential that we have an up-to-date email address on file.
+
+Please click on the link to confirm your registration on CloudWorldFinance,
+
+http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
+
+If you did not sign up for a CloudWorldFinance account, you can simply disregard this email.
+
+Happy Emailing!
+
+The CloudWorldFinance  Team
+
+{% endautoescape %}
