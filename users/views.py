@@ -1,4 +1,5 @@
 from datetime import timedelta
+from msilib.schema import Error
 
 from django.conf import settings
 
@@ -24,6 +25,8 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from django.views.generic import FormView, CreateView, UpdateView
+
+from profiles.models import Profile
 
 from .models import LoginAttempt, User, UserActivity
 
@@ -76,7 +79,7 @@ def my_login_page(request):
                                 mail_subject,
                                 email,
                                 current_site,
-                                "user/email_account_suspended.html",
+                                "users/email_account_suspended.html",
                             )
                             messages.error(
                                 request,
@@ -105,13 +108,13 @@ def my_login_page(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect("user:login")
+    return redirect("accounts:login")
 
 
 @login_required
 def user_update(request, pk):
     context = {}
-    obj = get_object_or_404(User, id=pk)
+    obj = get_object_or_404(Profile, id=pk)
     form = UserEditForm()
     if request.method == "POST":
         form = UserEditForm(request.POST, request.FILES, instance=obj)
@@ -123,7 +126,7 @@ def user_update(request, pk):
             return redirect("investment:user-profiles")
 
     context["form"] = form
-    return render(request, "user/create-profiles.html", context)
+    return render(request, "users/create-profiles.html", context)
 
 
 @login_required
@@ -136,7 +139,7 @@ def delete_user(request):
         messages.success(request, delete_message)
         return redirect("accounts:login")
 
-    return render(request, "user/delete.html")
+    return render(request, "users/delete.html")
 
 
 def activate_account_page(request, uidb64, token):
@@ -181,12 +184,107 @@ def change_password(request):
             messages.error(request, "Please correct the error below.")
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, "user/change_password.html", {"form": form})
+    return render(request, "users/change_password.html", {"form": form})
 
 
 def handler404(request, exception):
-    return render(request, "user/404.html")
+    return render(request, "users/404.html")
 
 
 def handle_server_error(request):
-    return render(request, "user/500.html")
+    return render(request, "users/500.html")
+
+
+@unauthenticated_user
+def signup_page(request):
+    form = RegistrationForm()
+    try:
+        profile_id = request.session.get("ref_profile")
+    except Error as e:
+        print(e)
+        profile_id = None
+    print(profile_id)
+    if profile_id is not None:
+        if request.method == "POST":
+            form = RegistrationForm(request.POST)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.is_active = False
+                registered_user = User.objects.get(id=user.id)
+                reg_profile = Profile.objects.get(user=registered_user)
+                recommended_by_profile = Profile.objects.get(pkid=profile_id)
+                # updated user referred by
+                reg_profile.recommended_by = recommended_by_profile.user
+                # Referral is reimbursed and update
+
+                recommended_by_profile.balance += 15.00
+                user.save()
+                recommended_by_profile.save()
+                reg_profile.save()
+                to_email = form.cleaned_data.get("email")
+                current_site = get_current_site(request)
+                mail_subject = "Account Activation"
+                response = send_user_email(
+                    user,
+                    mail_subject,
+                    to_email,
+                    current_site,
+                    "users/email_verification.html",
+                )
+                if response == "success":
+                    messages.success(
+                        request,
+                        "We have sent you an activation link in your email. Please confirm your"
+                        "email before continuing Your Registration Process. Check your spam folder if you don't receive it",
+                    )
+                    return redirect("accounts:login")
+                else:
+                    messages.error(
+                        request,
+                        "An error occurred. Please ensure you have good internet connection and you have entered a valid email address",
+                    )
+                    user.delete()
+            else:
+                if form.errors:
+                    for field in form:
+                        for error in field.errors:
+                            messages.error(request, error)
+                form = RegistrationForm()
+    else:
+        if request.method == "POST":
+            form = RegistrationForm(request.POST)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.is_active = False
+                user.save()
+                to_email = form.cleaned_data.get("email")
+                current_site = get_current_site(request)
+                mail_subject = "Account Activation"
+                response = send_user_email(
+                    user,
+                    mail_subject,
+                    to_email,
+                    current_site,
+                    "users/email_verification.html",
+                )
+                if response == "success":
+                    messages.success(
+                        request,
+                        "We have sent you an activation link in your email. Please confirm your"
+                        "email before continuing Your Registration Process. Check your spam folder if you don't receive it",
+                    )
+                    return redirect("accounts:login")
+                else:
+                    messages.error(
+                        request,
+                        "An error occurred. Please ensure you have good internet connection and you have entered a valid email address",
+                    )
+                    user.delete()
+            else:
+                if form.errors:
+                    for field in form:
+                        for error in field.errors:
+                            messages.error(request, error)
+                form = RegistrationForm()
+    context = {"form": form}
+    return render(request, "users/signup.html", context)

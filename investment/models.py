@@ -98,16 +98,25 @@ class Investment(TimeStampedUUIDModels):
         if self.investment_type == "Basic":
             self.amount = 200
             self.total_days = 7
-            self.percentage = 0.30
+            self.percentage = 0.15
+
+        if self.investment_type == "Limited":
+            self.total_days = 7
+            self.percentage = 0.20
+
+        if self.investment_type == "Unlimited":
+            self.total_days = 7
+            self.percentage = 0.20
 
         if self.investment_type == "Individual Retirement Account":
             self.amount = 500
             self.total_days = 14
-            self.percentage = 0.45
+            self.percentage = 0.35
 
-        if self.status == Status.Successful:
+        if self.status == Status.Successful and self.total_days is not None:
+            total_days = int(self.total_days)
             self.start_date = datetime.today().strftime("%Y-%m-%d")
-            self.end_date = datetime.today() + timedelta(days=self.total_days)
+            self.end_date = datetime.today() + timedelta(days=total_days)
 
         return super().save(*args, **kwargs)
 

@@ -111,7 +111,7 @@ class CreateDeposit(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("investment:withdrawal-records")
+        return reverse("investment:deposit-records")
 
 
 deposit_request = CreateDeposit.as_view()
@@ -138,9 +138,7 @@ def update_deposit_view(request, pk):
     form = DepositProofForm(request.POST or None, request.FILES or None, instance=obj)
     if form.is_valid():
         form.save()
-        messages.success(
-            request, "Next of Kin Information Has been Updated Successfully"
-        )
+        messages.success(request, "Your Deposit proof has been updated successfully")
         return redirect("banks:user-profiles")
 
     # add form dictionary to context
@@ -193,7 +191,7 @@ def create_basic_investment(request):
                 messages.error(
                     request, "Your account balance is lower than your deposit plan"
                 )
-                return redirect("investment:basic-invest")
+                return redirect("investicon:basic-invest")
     context = {"form": form}
     return render(request, "investicon/basic-investment.html", context)
 
@@ -251,7 +249,7 @@ def limited_invest_now(request):
                 form.save()
                 message = f"You have invest {amount} from your deposit. Please wait for our agents to verify your investment. Happy Investing"
                 messages.success(request, message)
-                return redirect("investment:investment-records")
+                return redirect("investicon:investment-records")
             else:
                 remainder = amount - profile.balance
                 form.delete()
@@ -348,6 +346,15 @@ def deposit_records(request):
 
 
 @login_required
+def withdrawal_records(request):
+    withdrawal = Withdrawal.objects.filter(user=request.user)
+    context = {
+        "withdrawal": withdrawal,
+    }
+    return render(request, "investicon/deposit-records.html", context)
+
+
+@login_required
 def admin_deposit_records(request):
     deposit_records = Deposit.objects.all()
     context = {
@@ -357,11 +364,19 @@ def admin_deposit_records(request):
 
 
 @login_required
-def widthrawal_records(request):
-    withdrawal_records = Withdrawal.objects.filter(user=request.user)
-
+def admin_withdrawal_records(request):
+    withdrawal_records = Withdrawal.objects.all()
     context = {
-        "withdrawals": withdrawal_records,
+        "withdrawal": withdrawal_records,
+    }
+    return render(request, "investicon/all-withdrawal-records.html", context)
+
+
+@login_required
+def admin_widthrawal_records(request):
+    withdrawal_records = Withdrawal.objects.filter(user=request.user)
+    context = {
+        "withdrawal": withdrawal_records,
     }
     return render(request, "investicon/deposit-records.html", context)
 

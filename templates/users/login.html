@@ -2,6 +2,7 @@
 
 {% load static %}
 
+{% load crispy_forms_tags %}
 
 {% block content %}
 
@@ -25,16 +26,16 @@
           {% include 'messages.html' %}
 
           <!-- Email input -->
-          <div class="form-outline mb-4">
-            {{form|crispy}}
+          <div class="form-outline mb-3">
+            {{form.email}}
+            <label class="form-label" for="form3Example4">Password</label>
           </div>
-
           <!-- Password input -->
-          {% comment %} <div class="form-outline mb-3">
+          <div class="form-outline mb-3">
             {{form.password}}
             <label class="form-label" for="form3Example4">Password</label>
           </div>
- {% endcomment %}
+
           <div class="d-flex justify-content-between align-items-center">
             <!-- Checkbox -->
             <div class="form-check mb-0">

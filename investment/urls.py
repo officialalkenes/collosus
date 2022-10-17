@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import views
 
-app_name = "investment"
+app_name = "investicon"
 
 urlpatterns = [
     path("", views.homepage, name="home"),
@@ -11,12 +11,17 @@ urlpatterns = [
     path("deposit-records/", views.deposit_records, name="deposit-records"),
     path("all-deposits/", views.admin_deposit_records, name="all-deposits"),
     path(
-        "admin-deposit-update/",
+        "admin-withdrawal-records/",
+        views.admin_widthrawal_records,
+        name="admin-withdrawal-records",
+    ),
+    path(
+        "admin-deposit-update/<pk>/",
         views.admin_update_deposit_view,
         name="admin-deposit-update",
     ),
     path("user-profiles/", views.user_profile, name="user-profiles"),
-    path("withdrawal-records/", views.widthrawal_records, name="withdrawal-records"),
+    path("withdrawal-records/", views.withdrawal_records, name="withdrawal-records"),
     path("investment-records/", views.investment_records, name="investment-records"),
     path("create-deposit/", views.deposit_request, name="create-deposit"),
     path(

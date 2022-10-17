@@ -55,7 +55,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{%url 'investment:dashboard'%}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{%url 'investicon:dashboard'%}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -67,7 +67,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="{%url 'investment:dashboard'%}">
+                <a class="nav-link" href="{%url 'investicon:dashboard'%}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Welcome Back {{request.user.username}}</span></a>
             </li>
@@ -90,8 +90,8 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Dashboard info:</h6>
-                        <a class="collapse-item" href="{% url 'investment:dashboard' %}">Dashboard Overview</a>
-                        <a class="collapse-item" href="{% url 'investment:dashboard' %}">Transactions Records</a>
+                        <a class="collapse-item" href="{% url 'investicon:dashboard' %}">Dashboard Overview</a>
+                        <a class="collapse-item" href="{% url 'investicon:dashboard' %}">Transactions Records</a>
                     </div>
                 </div>
             </li>
@@ -107,7 +107,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header"></h6>
-                        <a class="collapse-item" href="{% url 'investment:referred-users' %}">All Referred Users</a>
+                        <a class="collapse-item" href="{% url 'investicon:referred-users' %}">All Referred Users</a>
                     </div>
                 </div>
             </li>
@@ -131,17 +131,17 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Deposit Information:</h6>
                         {% if request.user.is_superuser %}
-                        <a class="collapse-item" href="{% url 'investment:all-deposits' %}">All Deposits</a>
+                        <a class="collapse-item" href="{% url 'investicon:all-deposits' %}">All Deposits</a>
                         {% endif %}
-                        <a class="collapse-item" href="{% url 'investment:create-deposit' %}">Deposit Now</a>
-                        <a class="collapse-item" href="{% url 'investment:deposit-records' %}">Deposit History</a>
+                        <a class="collapse-item" href="{% url 'investicon:create-deposit' %}">Deposit Now</a>
+                        <a class="collapse-item" href="{% url 'investicon:deposit-records' %}">Deposit History</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Withdrawal Information:</h6>
                         {% if request.user.is_superuser %}
-                        <a class="collapse-item" href="{% url 'investment:create-deposit' %}">All Withdrawal</a>
+                        <a class="collapse-item" href="{% url 'investicon:admin-withdrawal-records' %}">All Withdrawal</a>
                         {% endif %}
-                        <a class="collapse-item" href="{% url 'investment:create-withdrawal' %}">Withdraw Now</a>
-                        <a class="collapse-item" href="{% url 'investment:withdrawal-records' %}">Withdrawal Records</a>
+                        <a class="collapse-item" href="{% url 'investicon:create-withdrawal' %}">Withdraw Now</a>
+                        <a class="collapse-item" href="{% url 'investicon:withdrawal-records' %}">Withdrawal Records</a>
                     </div>
                 </div>
             </li>
@@ -155,13 +155,13 @@
                 <div id="collapsePage" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Investment Options:</h6>
-                        <a class="collapse-item" href="{% url 'investment:basic-invest' %}">Basic Investment Plan</a>
-                        <a class="collapse-item" href="{% url 'investment:dashboard' %}">Limited Investment Plan</a>
-                        <a class="collapse-item" href="{% url 'investment:dashboard' %}">Unlimited Investment Plan</a>
-                        <a class="collapse-item" href="{% url 'investment:dashboard' %}">Professional Investment Plan</a>
+                        <a class="collapse-item" href="{% url 'investicon:basic-invest' %}">Basic Investment Plan</a>
+                        <a class="collapse-item" href="{% url 'investicon:dashboard' %}">Limited Investment Plan</a>
+                        <a class="collapse-item" href="{% url 'investicon:dashboard' %}">Unlimited Investment Plan</a>
+                        <a class="collapse-item" href="{% url 'investicon:dashboard' %}">Professional Investment Plan</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Records:</h6>
-                        <a class="collapse-item" href="{% url 'investment:withdrawal-records' %}">Investment Records</a>
+                        <a class="collapse-item" href="{% url 'investicon:withdrawal-records' %}">Investment Records</a>
                     </div>
                 </div>
             </li>
@@ -173,14 +173,14 @@
             </li>
             {% if request.user.is_superuser %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'investment:home' %}">
+                <a class="nav-link" href="{% url 'investicon:home' %}">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Back to Homepage</span></a>
             </li>
             {% endif %}
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'investment:user-profiles' %}">
+                <a class="nav-link" href="{% url 'investicon:user-profiles' %}">
                     <i class="fas fa-fw fa-table"></i>
                     <span>User Profile</span></a>
             </li>
@@ -264,7 +264,7 @@
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                     aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="{% url 'investment:user-profiles' %}">
+                                    <a class="dropdown-item" href="{% url 'investicon:user-profiles' %}">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Check User Profiles
                                     </a>
@@ -290,7 +290,7 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="{% url 'investment:dashboard' %}" class="d-none d-sm-inline-block btn btn-md btn-primary shadow-sm"><i
+                        <a href="{% url 'investicon:dashboard' %}" class="d-none d-sm-inline-block btn btn-md btn-primary shadow-sm"><i
                                 class="fas fa-hand-wave download fa-sm text-white-50"></i>Welcome Back {{request.user.username}} </a>
                     </div>
 
@@ -366,7 +366,7 @@
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Loans</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                <a href="{% url 'investment:deposit-records' %}"> View Loan Status </a>
+                                                <a href="{% url 'investicon:deposit-records' %}"> View Loan Status </a>
                                             </div>
                                         </div>
                                         <div class="col-auto">

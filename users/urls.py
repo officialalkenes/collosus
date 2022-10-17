@@ -18,7 +18,7 @@ from .views import (
     my_login_page,
     user_update,
     logout_view,
-    # signup_page,
+    signup_page,
     # referral_view,
 )
 
@@ -27,7 +27,7 @@ app_name = "accounts"
 
 
 urlpatterns = [
-    # path("signup/", signup_page, name="signup"),
+    path("signup/", signup_page, name="signup"),
     # path("<str:code>/", referral_view, name="ref-view"),
     path("<pk>/profile-updating/", user_update, name="profile-updating"),
     path(
@@ -37,25 +37,27 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"),
     path(
         "reset-password",
-        PasswordResetView.as_view(template_name="user/password_reset.html"),
+        PasswordResetView.as_view(template_name="users/password_reset.html"),
         name="reset_password",
     ),
     # path('login', views.LoginView.as_view(template_name='user/login.html'),
     #      name='login'),
     path(
         "password_reset/done/",
-        PasswordResetDoneView.as_view(template_name="user/password_reset_sent.html"),
+        PasswordResetDoneView.as_view(template_name="users/password_reset_sent.html"),
         name="password_reset_done",
     ),
     path(
         "reset/<uidb64>/<token>/",
-        PasswordResetConfirmView.as_view(template_name="user/password_reset_form.html"),
+        PasswordResetConfirmView.as_view(
+            template_name="users/password_reset_form.html"
+        ),
         name="password_reset_confirm",
     ),
     path(
         "reset/done/",
         PasswordResetCompleteView.as_view(
-            template_name="user/password_reset_done.html"
+            template_name="users/password_reset_done.html"
         ),
         name="password_reset_complete",
     ),

@@ -27,15 +27,26 @@ DJANGO_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "cloudinary_storage",
     "django.contrib.staticfiles",
+    "cloudinary",
 ]
 
 LOCAL_APPS = [
     "users.apps.UsersConfig",
     "profiles.apps.ProfilesConfig",
+    "investment.apps.InvestmentConfig",
 ]
 
-THIRD_PARTY_APPS = ["django_countries"]
+THIRD_PARTY_APPS = [
+    "django_countries",
+    "crispy_forms",
+    "crispy_bootstrap5",
+]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
@@ -89,6 +100,11 @@ DATABASES = {
     }
 }
 
+
+# Time in seconds after each login attempts
+LOGIN_ATTEMPTS_TIME_LIMIT = 0
+# limit the amount of attempts to which the user will be inactive and password set mail sent
+MAX_LOGIN_ATTEMPTS = 5
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
