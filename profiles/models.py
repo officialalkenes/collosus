@@ -1,5 +1,6 @@
 from msilib.schema import Error
-from django.contrib.auth import get_user_model
+
+from django.conf import settings
 
 from django.db import models
 
@@ -10,9 +11,6 @@ from django_countries.fields import CountryField
 from .utils import get_referral_code, user_directory_path
 
 
-User = get_user_model()
-
-
 class Gender(models.TextChoices):
     MALE = "Male", _("Male")
     FEMALE = "Female", _("Female")
@@ -20,7 +18,9 @@ class Gender(models.TextChoices):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
+    )
     balance = models.DecimalField(default=5.00, max_digits=10, decimal_places=2)
     count = models.PositiveIntegerField(default=0)
     date_of_birth = models.DateField(
@@ -43,7 +43,7 @@ class Profile(models.Model):
     )
 
     recommended_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="recomendation",
         blank=True,

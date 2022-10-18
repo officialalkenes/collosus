@@ -30,10 +30,10 @@ DJANGO_APPS = [
     "cloudinary_storage",
     "django.contrib.staticfiles",
     "cloudinary",
+    "users",
 ]
 
 LOCAL_APPS = [
-    "users.apps.UsersConfig",
     "profiles.apps.ProfilesConfig",
     "investment.apps.InvestmentConfig",
 ]

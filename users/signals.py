@@ -1,5 +1,7 @@
 from datetime import date, datetime
 
+from django.conf import settings
+
 from django.contrib.auth.signals import (
     user_logged_in,
     user_logged_out,
@@ -21,7 +23,7 @@ from profiles.models import Profile
 # from investment.models import Portfolio
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def post_save_profile_receiver(sender, instance, created, **kwargs):
     if created:
         Portfolio.objects.create(user=instance)

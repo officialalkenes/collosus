@@ -5,7 +5,7 @@ import uuid
 
 from datetime import datetime, timedelta
 
-from django.contrib.auth import get_user_model
+from django.conf import settings
 
 from django.db import models
 
@@ -13,8 +13,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 from django_countries.fields import CountryField
-
-User = get_user_model()
 
 
 class TimeStampedUUIDModels(models.Model):
@@ -63,7 +61,9 @@ class InvestmentTypes(models.Model):
 
 
 class Investment(TimeStampedUUIDModels):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="investment")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="investment"
+    )
     trxid = models.CharField(max_length=10, blank=True)
     investment_type = models.CharField(
         max_length=30,
@@ -137,7 +137,9 @@ class Investment(TimeStampedUUIDModels):
 
 
 class Deposit(TimeStampedUUIDModels):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="deposit")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="deposit"
+    )
     trx = models.CharField(max_length=10, blank=True, verbose_name=_("Transaction Id"))
     payment = models.CharField(
         max_length=30,
@@ -170,7 +172,9 @@ class Deposit(TimeStampedUUIDModels):
 
 
 class Withdrawal(TimeStampedUUIDModels):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="withdrawal")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="withdrawal"
+    )
     trx = models.CharField(max_length=10, blank=True, verbose_name=_("Transaction Id"))
     payment = models.CharField(
         max_length=30,
@@ -195,7 +199,9 @@ class Withdrawal(TimeStampedUUIDModels):
 
 
 class Portfolio(TimeStampedUUIDModels):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="portfolio")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="portfolio"
+    )
     balance = models.DecimalField(default=5.00, max_digits=10, decimal_places=2)
     count = models.PositiveIntegerField(default=0)
 

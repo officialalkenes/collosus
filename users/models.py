@@ -11,15 +11,14 @@ from django.contrib.auth.signals import (
     user_login_failed,
 )
 
-
 from django.db.models.functions import Now
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
 from .managers import Manager
 
-from profiles.models import Profile
 from investment.models import Portfolio
+from profiles.models import Profile
 
 
 class User(AbstractBaseUser, PermissionsMixin):

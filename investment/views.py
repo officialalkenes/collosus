@@ -111,7 +111,7 @@ class CreateDeposit(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("investment:deposit-records")
+        return reverse("investicon:deposit-records")
 
 
 deposit_request = CreateDeposit.as_view()
@@ -119,12 +119,19 @@ deposit_request = CreateDeposit.as_view()
 
 def admin_update_deposit_view(request, pk):
     deposit = Deposit.objects.get(id=pk)
+    profile = Profile.objects.get(user=deposit.user)
     form = UpdateDepositForm()
     if request.method == "POST":
         form = UpdateDepositForm(request.POST, instance=deposit)
         if form.is_valid():
+            if form.status == "Successful":
+                profile.amount += form.amount
+                messages.success(
+                    request, "Profile Amount has been updated successfully"
+                )
+                profile.save()
             form.save()
-            return redirect("investment:deposit-history")
+            return redirect("investicon:deposit-history")
     form = UpdateDepositForm()
     context = {"form": form}
     return render(request, "investicon/admin-deposit.html", context)
