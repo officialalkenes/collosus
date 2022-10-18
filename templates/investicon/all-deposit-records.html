@@ -42,11 +42,14 @@
                         <td>{{data.status}}</td>
                         <td>{{data.wallet_address}}</td>
                         <td>{{data.created}}</td>
-                    {% if request.user.is_superuser %}
+
+                        {% if request.user.is_superuser and data.status == "Pending" %}
                         <td>
-                            <a href="{{data.get_admin_url}}" class="btn-md btn-success rounded-1 mt-4 p-2 small">Update Deposit </a>
+                            <a href="{{data.get_admin_url}}" class="btn-md btn-secondary rounded-1 mt-2 p-2 small">Update Deposit </a>
                         </td>
-                    {% endif %}
+                        {% else %}
+                            <td class="center">Deposit Updated Already</td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>

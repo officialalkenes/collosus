@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from http.client import HTTPResponse
 from msilib.schema import Error
+from django.contrib.messages.views import SuccessMessageMixin
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -97,7 +98,7 @@ def dashboard(request):
 # deposit_request = CreateDeposit.as_view()
 
 
-class CreateDeposit(LoginRequiredMixin, CreateView):
+class CreateDeposit(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Deposit
     fields = [
         "amount",
@@ -117,7 +118,7 @@ class CreateDeposit(LoginRequiredMixin, CreateView):
 deposit_request = CreateDeposit.as_view()
 
 
-class UpdateDeposit(LoginRequiredMixin, UpdateView):
+class UpdateDeposit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Deposit
     fields = ("amount", "payment", "status")
     template_name = "investicon/admin-deposit.html"

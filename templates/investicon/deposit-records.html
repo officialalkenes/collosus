@@ -47,7 +47,7 @@
 
                         {% if request.user.is_superuser and data.status == "Pending" %}
                         <td>
-                            <a href="{{data.get_admin_url}}" class="btn-md btn-success rounded-1 mt-2 p-2 small">Update Deposit </a>
+                            <a href="{{data.get_admin_url}}" class="btn-md btn-secondary rounded-1 mt-2 p-2 small">Update Deposit </a>
                         </td>
                         {% else %}
                             <td class="center">Deposit Updated Already</td>
@@ -62,7 +62,8 @@
         </div>
     </div>
 </div>
-            </div>
+</div>
+
             <div class="col-xl-4 col-lg-7">
                 <div class="card shadow mb-4">
                     <div
