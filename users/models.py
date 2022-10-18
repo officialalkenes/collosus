@@ -5,7 +5,21 @@ from django.urls import reverse
 
 from django.utils.translation import gettext_lazy as _
 
+from django.contrib.auth.signals import (
+    user_logged_in,
+    user_logged_out,
+    user_login_failed,
+)
+
+
+from django.db.models.functions import Now
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
+
 from .managers import Manager
+
+from profiles.models import Profile
+from investment.models import Portfolio
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -62,3 +76,43 @@ class LoginAttempt(models.Model):
 
     def __str__(self):
         return "user: {}, attempts: {}".format(self.user.email, self.login_attempts)
+
+
+@receiver(post_save, sender=User)
+def post_save_profile_receiver(sender, instance, created, **kwargs):
+    if created:
+        Portfolio.objects.create(user=instance)
+        Profile.objects.create(user=instance)
+
+
+@receiver(user_logged_in)
+def register_login(sender, user, request, **kwargs):
+    UserActivity.objects.create(user=user, session_key=request.session.session_key)
+
+
+@receiver(user_logged_out)
+def register_logout(sender, user, request, **kwargs):
+    UserActivity.objects.filter(
+        user=user, session_key=request.session.session_key
+    ).update(logout=Now())
+
+
+@receiver(user_logged_in)
+def log_user_login(sender, request, user, **kwargs):
+    return "user {} logged in through page {}".format(
+        user.username, request.META.get("HTTP_REFERER")
+    )
+
+
+@receiver(user_login_failed)
+def log_user_login_failed(sender, credentials, request, **kwargs):
+    return "user {} logged in failed through page {}".format(
+        credentials.get("username"), request.META.get("HTTP_REFERER")
+    )
+
+
+@receiver(user_logged_out)
+def log_user_logout(sender, request, user, **kwargs):
+    return "user {} logged out through page {}".format(
+        user.username, request.META.get("HTTP_REFERER")
+    )
