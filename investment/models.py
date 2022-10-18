@@ -1,16 +1,16 @@
+from email.policy import default
 import random
 from sqlite3 import TimestampFromTicks
 import string
 import uuid
+from django.utils.text import slugify
 
 from datetime import datetime, timedelta
 
 from django.conf import settings
-
 from django.db import models
-
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-
 
 from django_countries.fields import CountryField
 
@@ -141,6 +141,7 @@ class Deposit(TimeStampedUUIDModels):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="deposit"
     )
     trx = models.CharField(max_length=10, blank=True, verbose_name=_("Transaction Id"))
+    slug = models.SlugField(max_length=8, blank=True)
     payment = models.CharField(
         max_length=30,
         verbose_name=_("Payment Method"),
@@ -166,15 +167,27 @@ class Deposit(TimeStampedUUIDModels):
         else:
             self.wallet_address = "cscswe88e999wesu"
 
-        # N = 8
-        # self.trx = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(N))
+        N = 8
+        if self.trx == "":
+            self.trx = "".join(
+                random.choice(string.ascii_uppercase + string.digits) for _ in range(N)
+            )
+        if self.slug == "":
+            self.slug = slugify(self.trx)
         return super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("investicon:update-deposit", kwargs={"slug": self.slug})
+
+    def get_admin_url(self):
+        return reverse("investicon:admin-deposit-update", kwargs={"slug": self.slug})
 
 
 class Withdrawal(TimeStampedUUIDModels):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="withdrawal"
     )
+    slug = models.SlugField(max_length=8, blank=True)
     trx = models.CharField(max_length=10, blank=True, verbose_name=_("Transaction Id"))
     payment = models.CharField(
         max_length=30,
@@ -195,7 +208,15 @@ class Withdrawal(TimeStampedUUIDModels):
             self.trx = "".join(
                 random.choice(string.ascii_uppercase + string.digits) for _ in range(N)
             )
+        if self.slug == "":
+            self.slug = slugify(self.trx)
         return super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("investicon:update-withdrawal", kwargs={"slug": self.slug})
+
+    def get_admin_url(self):
+        return reverse("investicon:admin-deposit-update", kwargs={"slug": self.slug})
 
 
 class Portfolio(TimeStampedUUIDModels):

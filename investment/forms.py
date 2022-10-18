@@ -125,7 +125,6 @@ class UpdateDepositForm(forms.ModelForm):
     class Meta:
         model = Deposit
         fields = (
-            "user",
             "trx",
             "payment",
             "proof",

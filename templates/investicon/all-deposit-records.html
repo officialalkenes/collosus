@@ -43,7 +43,8 @@
                         <td>{{data.wallet_address}}</td>
                         <td>{{data.created}}</td>
                     {% if request.user.is_superuser %}
-                        <td><a href="{{data.get_absolute_url}}" class="btn btn-primary mt-4">Update Deposit </a>
+                        <td>
+                            <a href="{{data.get_admin_url}}" class="btn-md btn-success rounded-1 mt-4 p-2 small">Update Deposit </a>
                         </td>
                     {% endif %}
                     </tr>
@@ -65,7 +66,7 @@
                 </div>
                 <div class=''>
                     <div class='centered'>
-                        <h6 class='text-secondary'> You can easily deposit using this link <span class='text-info font-weight-bold'> <a href="{% url 'investment:create-deposit' %}" class="d-none d-sm-inline-block shadow-md">
+                        <h6 class='text-secondary'> You can easily deposit using this link <span class='text-info font-weight-bold'> <a href="{% url 'investicon:create-deposit' %}" class="d-none d-sm-inline-block shadow-md">
                             Link </a></span>
                          Or Reach out to us Through the <span class='text-info font-weight-bold'>Chat Support widget.</span></h6>
                         </div>

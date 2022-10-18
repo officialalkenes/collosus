@@ -38,14 +38,14 @@
                         <td>{{data.trx}}</td>
                         <td>{{data.status}}</td>
                         {% if records.payment == 'BTC' %}
-                        <td>{{request.profile.btc_wallet}}</td>
+                            <td>{{request.profile.btc_wallet}}</td>
                         {% elif records.payment == 'ETH' %}
-                        <td>{{request.profile.eth_wallet}}</td>
+                            <td>{{request.profile.eth_wallet}}</td>
                         {% else %}
-                        <td>{{request.profile.trx_wallet}}</td>
+                            <td>{{request.profile.trx_wallet}}</td>
                         {% endif %}
-                        <td>{{data.created}}</td>
-                    </tr>
+                            <td>{{data.created}}</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -64,7 +64,7 @@
                 </div>
                 <div class=''>
                     <div class='centered'>
-                        <h6 class='text-secondary'> You can easily withdraw your funds using this link. Be sure to have the minimum withdrawal in your Portfolio<span class='text-info font-weight-bold'> <a href="{% url 'investment:create-withdrawal' %}" class="d-none d-sm-inline-block shadow-md">
+                        <h6 class='text-secondary'> You can easily withdraw your funds using this link. Be sure to have the minimum withdrawal in your Portfolio<span class='text-info font-weight-bold'> <a href="{% url 'investicon:create-withdrawal' %}" class="d-none d-sm-inline-block shadow-md">
                             Link </a></span>
                          Or Reach out to us Through the <span class='text-info font-weight-bold'>Chat Support widget.</span></h6>
                         </div>

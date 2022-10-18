@@ -11,12 +11,15 @@ urlpatterns = [
     path("deposit-records/", views.deposit_records, name="deposit-records"),
     path("all-deposits/", views.admin_deposit_records, name="all-deposits"),
     path(
+        "update-deposit/<str:slug>/", views.update_deposit_view, name="update-deposit"
+    ),
+    path(
         "admin-withdrawal-records/",
         views.admin_widthrawal_records,
         name="admin-withdrawal-records",
     ),
     path(
-        "admin-deposit-update/<pk>/",
+        "admin-deposit-update/<str:slug>/",
         views.admin_update_deposit_view,
         name="admin-deposit-update",
     ),
