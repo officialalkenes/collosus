@@ -20,7 +20,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            {% if records %}
+            {% if withdrawal %}
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
@@ -32,20 +32,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for data in records %}
+                    {% for data in withdrawal %}
                     <tr>
                         <td>{{data.amount}}</td>
                         <td>{{data.trx}}</td>
                         <td>{{data.status}}</td>
-                        {% if records.payment == 'BTC' %}
-                            <td>{{request.profile.btc_wallet}}</td>
-                        {% elif records.payment == 'ETH' %}
-                            <td>{{request.profile.eth_wallet}}</td>
-                        {% else %}
-                            <td>{{request.profile.trx_wallet}}</td>
-                        {% endif %}
-                            <td>{{data.created}}</td>
-                        </tr>
+                        <td>{{data.address}}</td>
+                        <td>{{data.created}}</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>

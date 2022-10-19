@@ -187,10 +187,10 @@ class Withdrawal(TimeStampedUUIDModels):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="withdrawal"
     )
-    slug = models.SlugField(max_length=8, blank=True)
+    slug = models.SlugField(max_length=15, blank=True)
     trx = models.CharField(max_length=10, blank=True, verbose_name=_("Transaction Id"))
     amount = models.DecimalField(
-        max_digits=8, decimal_places=2, help_text="Enter Amount in Usd Ratio"
+        max_digits=10, decimal_places=2, help_text="Enter Amount in Usd Ratio"
     )
     address = models.CharField(
         max_length=100,
@@ -212,11 +212,8 @@ class Withdrawal(TimeStampedUUIDModels):
             self.slug = slugify(self.trx)
         return super().save(*args, **kwargs)
 
-    def get_absolute_url(self):
-        return reverse("investicon:update-withdrawal", kwargs={"slug": self.slug})
-
     def get_admin_url(self):
-        return reverse("investicon:admin-deposit-update", kwargs={"slug": self.slug})
+        return reverse("investicon:admin-withdrawal-update", kwargs={"slug": self.slug})
 
 
 class Portfolio(TimeStampedUUIDModels):

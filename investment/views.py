@@ -30,6 +30,8 @@ from investment.forms import (
     UpdateDepositForm,
 )
 
+from .mixins import AdminRequiredMixin
+
 from investment.models import Deposit, Investment, InvestmentType, Portfolio, Withdrawal
 from profiles.models import Profile
 
@@ -66,7 +68,7 @@ def homepage(request):
 def dashboard(request):
     try:
         user = request.user
-        profiling = Profile.objects.filter(user=user).first()
+        profiling = Profile.objects.filter(user=user)
         deposits = Deposit.objects.filter(user=user)
         current_site = get_current_site(request)
         withdrawal = Withdrawal.objects.filter(user=user)
@@ -104,7 +106,7 @@ class CreateDeposit(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 deposit_request = CreateDeposit.as_view()
 
 
-class UpdateDeposit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class UpdateDeposit(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Deposit
     fields = ("amount", "payment", "status")
     template_name = "investicon/admin-deposit.html"
@@ -126,7 +128,7 @@ class UpdateDeposit(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 admin_update_deposit_view = UpdateDeposit.as_view()
 
 
-class UpdateWithdrawal(LoginRequiredMixin, UpdateView):
+class UpdateWithdrawal(AdminRequiredMixin, UpdateView):
     model = Withdrawal
     fields = ("amount", "payment", "status")
     template_name = "investicon/admin-deposit.html"
@@ -142,12 +144,35 @@ class UpdateWithdrawal(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("investicon:deposit-records")
+        return reverse("investicon:admin-withdrawal-records")
 
 
-admin_update_deposit_view = UpdateDeposit.as_view()
+admin_update_withdrawal_view = UpdateWithdrawal.as_view()
 
 
+class UpdateInvestment(AdminRequiredMixin, UpdateView):
+    model = Investment
+    fields = ("amount", "status")
+    template_name = "investicon/admin-deposit.html"
+    success_message = "Your Withrawal request has been updated successfully!"
+
+    def form_valid(self, form):
+        user = form.instance.user
+        amount = form.instance.amount
+        profile = Profile.objects.filter(user=user).first()
+        if form.instance.status == "Successful":
+            profile.balance -= amount
+            profile.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("investicon:admin-investment-records")
+
+
+admin_update_investment_view = UpdateInvestment.as_view()
+
+
+# Deposit Proof
 @login_required
 def update_deposit_view(request, slug):
     context = {}
@@ -172,13 +197,13 @@ class CreateWithdrawal(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         user = self.request.user
-        profile = Profile.objects.filter(user).first()
-        form.instance.user = self.request.user
+        profile = Profile.objects.filter(user=user).first()
+        form.instance.user = user
         form.instance.address = profile.btc_wallet
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("investment:withdrawal-records")
+        return reverse("investicon:withdrawal-records")
 
 
 withdrawal_create = CreateWithdrawal.as_view()
@@ -217,7 +242,7 @@ def create_basic_investment(request):
     return render(request, "investicon/basic-investment.html", context)
 
 
-def update_basic_investment(request, pk):
+def update_investment(request, pk):
     obj = get_object_or_404(Investment, pk)
     form = TransferInvestmentForm()
     if request.method == "POST":
@@ -226,10 +251,16 @@ def update_basic_investment(request, pk):
             user = form.cleaned_data.get("user")
             profile = Profile.objects.get(user=user)
             profit = form.cleaned_data.get("profit")
+            amount = form.instance.amount
             profile.amount += profit
             form.save()
+        else:
+            remainder = amount - profile.balance
+            form.delete()
+            messages.error(f"You need {remainder} to invest in this plan")
+            return redirect("investment:deposit")
     context = {"form": form}
-    return render(request, "investicon/basic-investment.html", context)
+    return render(request, "investicon/limited-investment.html", context)
 
 
 # Forms

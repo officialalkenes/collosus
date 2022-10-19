@@ -40,13 +40,13 @@
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center">
 
-      <h1 class="logo me-auto"><a href="{% url 'investment:home' %}"><img src="{% static 'assets/img/btc.jpg' %}" alt="" class="rounded-circle shadow-lg"></a></h1>
+      <h1 class="logo me-auto"><a href="{% url 'investicon:home' %}"><img src="{% static 'assets/img/btc.jpg' %}" alt="" class="rounded-circle shadow-lg"></a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <a href="index.html" class="logo me-auto"></a>
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto active" href="{% url 'investment:home' %}">Home</a></li>
+          <li><a class="nav-link scrollto active" href="{% url 'investicon:home' %}">Home</a></li>
           <li><a class="nav-link scrollto" href="#about">About</a></li>
           <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
           <li><a class="nav-link scrollto" href="#portfolio">Coin Calculator</a></li>
@@ -54,9 +54,9 @@
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           {% if request.user.is_superuser %}
           <li><a class="getstarted scrollto" href="/superaccess">My Admin Page</a></li>
-          <li><a class="getstarted scrollto" href="{% url 'investment:dashboard' %}">Back to Dashboard</a></li>
+          <li><a class="getstarted scrollto" href="{% url 'investicon:dashboard' %}">Back to Dashboard</a></li>
           {% elif request.user.is_authenticated %}
-          <li><a class="getstarted scrollto" href="{%url 'investment:dashboard' %}">Back to Dashboard</a></li>
+          <li><a class="getstarted scrollto" href="{%url 'investicon:dashboard' %}">Back to Dashboard</a></li>
 {% else %}
           <li><a class="getstarted scrollto" href="{% url 'accounts:signup' %}">Get Started</a></li>
           <li><a class="getstarted scrollto" href="{% url 'accounts:login' %}">Login</a></li>

@@ -20,14 +20,14 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            {% if deposits %}
+            {% if withdrawal %}
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>Amount</th>
                         <th>Transaction Id</th>
                         <th>Status</th>
-                        <th>Deposited Wallet</th>
+                        <th>Wallet Address</th>
                         <th>Created</th>
                         {% if request.user.is_superuser %}
                             <th>Update Deposit Request</th>
@@ -40,10 +40,10 @@
                         <td>{{data.amount}}</td>
                         <td>{{data.trx}}</td>
                         <td>{{data.status}}</td>
-                        <td>{{data.wallet_address}}</td>
+                        <td>{{data.address}}</td>
                         <td>{{data.created}}</td>
                     {% if request.user.is_superuser %}
-                        <td><a href="{{data.get_absolute_url}}" class="btn btn-primary mt-4">Update Deposit </a>
+                        <td><a href="{{data.get_admin_url}}" class="btn btn-primary mt-4">Update Deposit </a>
                         </td>
                     {% endif %}
                     </tr>
