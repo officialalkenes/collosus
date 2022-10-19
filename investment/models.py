@@ -189,14 +189,14 @@ class Withdrawal(TimeStampedUUIDModels):
     )
     slug = models.SlugField(max_length=8, blank=True)
     trx = models.CharField(max_length=10, blank=True, verbose_name=_("Transaction Id"))
-    payment = models.CharField(
-        max_length=30,
-        verbose_name=_("Payment Method"),
-        choices=PaymentMethod.choices,
-        default=False,
-    )
     amount = models.DecimalField(
         max_digits=8, decimal_places=2, help_text="Enter Amount in Usd Ratio"
+    )
+    address = models.CharField(
+        max_length=100,
+        verbose_name=_("Receiving Wallet Address"),
+        blank=True,
+        null=True,
     )
     status = models.CharField(
         max_length=20, choices=Status.choices, default=Status.Pending

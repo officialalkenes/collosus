@@ -84,20 +84,6 @@ def dashboard(request):
     return render(request, "investicon/index.html", context)
 
 
-# class CreateDeposit(LoginRequiredMixin, FormView):
-#     form_class = DepositForm
-#     template_name = 'investicon/deposit.html'
-#     success_message = "Loan Request has been submitted successfully!"
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
-
-#     def get_success_url(self):
-#         return reverse('investment:deposit-records')
-
-# deposit_request = CreateDeposit.as_view()
-
-
 class CreateDeposit(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Deposit
     fields = [
@@ -151,7 +137,7 @@ class UpdateWithdrawal(LoginRequiredMixin, UpdateView):
         amount = form.instance.amount
         profile = Profile.objects.filter(user=user).first()
         if form.instance.status == "Successful":
-            profile.balance += amount
+            profile.balance -= amount
             profile.save()
         return super().form_valid(form)
 
@@ -180,16 +166,13 @@ def update_deposit_view(request, slug):
 
 class CreateWithdrawal(LoginRequiredMixin, CreateView):
     model = Withdrawal
-    fields = (
-        "amount",
-        "payment",
-    )
+    fields = ("amount",)
     template_name = "investicon/withdrawal.html"
     success_message = "Your Withrawal request is Currently being processed!"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.address = self.user.profile
+
         return super().form_valid(form)
 
     def get_success_url(self):

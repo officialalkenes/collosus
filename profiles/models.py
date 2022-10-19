@@ -35,12 +35,12 @@ class Profile(models.Model):
     btc_wallet = models.CharField(
         max_length=100, blank=True, verbose_name=_("Bitcoin Address")
     )
-    eth_wallet = models.CharField(
-        max_length=100, blank=True, verbose_name=_("Ethereum Address")
-    )
-    trx_wallet = models.CharField(
-        max_length=100, blank=True, verbose_name=_("Tron Address")
-    )
+    # eth_wallet = models.CharField(
+    #     max_length=100, blank=True, verbose_name=_("Ethereum Address")
+    # )
+    # trx_wallet = models.CharField(
+    #     max_length=100, blank=True, verbose_name=_("Tron Address")
+    # )
 
     recommended_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
