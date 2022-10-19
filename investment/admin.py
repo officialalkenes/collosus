@@ -18,11 +18,11 @@ class DepositAdmin(admin.ModelAdmin):
 
 @admin.register(Withdrawal)
 class WithdrawalAdmin(admin.ModelAdmin):
-    list_display = ["amount", "user", "payment", "status", "trx"]
+    list_display = ["amount", "user", "address", "status", "trx"]
     list_display_links = [
         "amount",
         "user",
-        "payment",
+        "address",
         "status",
     ]
 

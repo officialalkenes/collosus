@@ -171,8 +171,10 @@ class CreateWithdrawal(LoginRequiredMixin, CreateView):
     success_message = "Your Withrawal request is Currently being processed!"
 
     def form_valid(self, form):
+        user = self.request.user
+        profile = Profile.objects.filter(user).first()
         form.instance.user = self.request.user
-
+        form.instance.address = profile.btc_wallet
         return super().form_valid(form)
 
     def get_success_url(self):
