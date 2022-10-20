@@ -43,8 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self) -> str:
         return f"{self.email}"
 
-    def get_absolute_url(self):
-        return reverse("accounts:user-update", args=[str(self.id)])
+    # def get_absolute_url(self):
+    #     return reverse("accounts:user-update", args=[str(self.id)])
 
     @property
     def get_fullname(self):
@@ -57,8 +57,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = "User"
         verbose_name_plural = "Users"
 
-    # def get_absolute_url(self):
-    #     return reverse("accounts:profile-updating", args=[str(self.id)])
+    def get_absolute_url(self):
+        return reverse("accounts:profile-updating", args=[str(self.id)])
 
 
 class UserActivity(models.Model):

@@ -47,12 +47,12 @@ urlpatterns = [
     path(
         "admin-investment-update/<str:slug>/",
         views.admin_update_investment_view,
-        name="admin-withdrawal-update",
+        name="admin-investment-update",
     ),
     path(
         "admin-investment-records/",
         views.admin_investment_records,
-        name="admin-withdrawal-records",
+        name="admin-investment-records",
     ),
     path("investment-records/", views.investment_records, name="investment-records"),
     path("basic-invest/", views.create_basic_investment, name="basic-invest"),

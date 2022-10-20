@@ -36,7 +36,6 @@ from .mixins import AdminRequiredMixin
 from investment.models import (
     Deposit,
     Investment,
-    InvestmentTypes,
     Portfolio,
     Withdrawal,
 )
@@ -117,7 +116,7 @@ class UpdateDeposit(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Deposit
     fields = ("amount", "payment", "status")
     template_name = "investicon/admin-deposit.html"
-    success_message = "Your Withrawal request has been updated successfully!"
+    success_message = "Your Deposit request has been updated successfully!"
 
     def form_valid(self, form):
         user = form.instance.user
@@ -241,42 +240,62 @@ class CreateWithdrawal(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 withdrawal_create = CreateWithdrawal.as_view()
 
 
-def create_basic_investment(request):
-    form = BasicInvestmentForm()
-    if request.method == "POST":
-        form = BasicInvestmentForm(request.POST)
-        if form.is_valid():
-            amount = form.cleaned_data.get("amount")
-            user = request.user
-            profile = Profile.objects.get(user=user)
-            if profile.balance >= amount:
-                Investment.objects.create(
-                    user=user,
-                    amount=amount,
-                    percentage=0.15,
-                    total_days=7,
-                    profit=0.00,
-                    total_percentage=7 * 0.15,
-                    status="Pending",
-                    investment_type=InvestmentTypes.objects.filter(
-                        investment_type="Basic"
-                    ).first(),
-                )
-                profile.balance -= amount
-                profile.save()
-                form.save()
-                messages.success(
-                    request,
-                    "You Have Successfully Subscribe to the basic investment plan",
-                )
-                return redirect("investment:investment-records")
-            else:
-                messages.error(
-                    request, "Your account balance is lower than your deposit plan"
-                )
-                return redirect("investicon:basic-invest")
-    context = {"form": form}
-    return render(request, "investicon/basic-investment.html", context)
+class CreateBasicInvestment(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = Investment
+    fields = ("amount",)
+    template_name = "investicon/basic-investment.html"
+    success_message = "You have successfully subscribed to basic investment!"
+
+    def form_valid(self, form):
+        user = self.request.user
+        amount = form.instance.amount
+        form.instance.status = "Successful"
+        profile = Profile.objects.filter(user=user).first()
+        if form.instance.status == "Successful" and amount <= profile.balance:
+            profile.balance -= amount
+            profile.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("investicon:withdrawal-records")
+
+
+create_basic_investment = CreateBasicInvestment.as_view()
+
+# def create_basic_investment(request):
+#     form = BasicInvestmentForm()
+#     if request.method == "POST":
+#         form = BasicInvestmentForm(request.POST)
+#         if form.is_valid():
+#             amount = form.cleaned_data.get("amount")
+#             user = request.user
+#             profile = Profile.objects.get(user=user)
+#             if profile.balance >= amount:
+#                 Investment.objects.create(
+#                     user=user,
+#                     amount=amount,
+#                     percentage=0.15,
+#                     total_days=7,
+#                     profit=0.00,
+#                     total_percentage=7 * 0.15,
+#                     status="Pending",
+#                     investment_type = "Basic"
+#                 )
+#                 profile.balance -= amount
+#                 profile.save()
+#                 form.save()
+#                 messages.success(
+#                     request,
+#                     "You Have Successfully Subscribe to the basic investment plan",
+#                 )
+#                 return redirect("investment:investment-records")
+#             else:
+#                 messages.error(
+#                     request, "Your account balance is lower than your deposit plan"
+#                 )
+#                 return redirect("investicon:basic-invest")
+#     context = {"form": form}
+#     return render(request, "investicon/basic-investment.html", context)
 
 
 def update_investment(request, pk):
@@ -409,18 +428,16 @@ def ira_invest_now(request):
 
 @login_required
 def admin_investment_records(request):
-    investments = Investment.objects.all()
-    context = {"investments": investments}
+    records = Investment.objects.all()
+    context = {"records": records}
     return render(request, "investicon/all-investment-records.html", context)
 
 
 @login_required
 def investment_records(request):
     records = Investment.objects.filter(user=request.user)
-    admin = Investment.objects.all()
     context = {
         "records": records,
-        "admin": admin,
     }
     return render(request, "investicon/investment-records.html", context)
 
@@ -478,19 +495,10 @@ def user_profile(request):
 def my_referrals(request):
     profile = Profile.objects.get(user=request.user)
     total_ref = profile.get_recommended_profiles()
-    ref_balance = profile.get_total_ref_balance()
     context = {
         "total_ref": total_ref,
-        "ref_balance": ref_balance,
     }
     return render(request, "investicon/referral-table.html", context)
-
-
-class UpdateDeposit(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = Deposit
-    fields = ("amount", "payment", "status")
-    template_name = "investicon/deposit.html"
-    success_message = "Your Deposit request has been updated successfully!"
 
 
 class UpdateInvestment(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from investment.models import Deposit, Investment, InvestmentTypes, Withdrawal
+from investment.models import Deposit, Investment, Withdrawal
 
 # Register your models here.
 
@@ -36,8 +36,3 @@ class InvestmentAdmin(admin.ModelAdmin):
         "profit",
         "total_percentage",
     ]
-
-
-@admin.register(InvestmentTypes)
-class InvestmentTypeAdmin(admin.ModelAdmin):
-    list_display = ["investment_type"]

@@ -161,6 +161,9 @@
                         <a class="collapse-item" href="{% url 'investicon:dashboard' %}">Professional Investment Plan</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Records:</h6>
+                        {% if request.user.is_superuser %}
+                        <a class="collapse-item" href="{% url 'investicon:admin-investment-records' %}">All Investment Records</a>
+                        {% endif %}
                         <a class="collapse-item" href="{% url 'investicon:investment-records' %}">Investment Records</a>
                     </div>
                 </div>
@@ -339,12 +342,12 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Referral Balance
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">All Referral User
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                                        ${{ref_balance}}
+                                                    <div class="h5 mb-0 mx-4 font-weight-bold text-gray-800">
+                                                        <h3>{{total}}</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -363,10 +366,10 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Loans</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                <a href="{% url 'investicon:deposit-records' %}"> View Loan Status </a>
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                Active Investments</div>
+                                            <div class="h5 mb-0 mx-4 font-weight-bold text-gray-800">
+                                                <h3> {{total}} </h3>
                                             </div>
                                         </div>
                                         <div class="col-auto">
@@ -388,7 +391,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Cloud Banking {{now.year}}</span>
+                        <span>Copyright &copy; Crypto Collossus {{now.year}}</span>
                     </div>
                 </div>
             </footer>

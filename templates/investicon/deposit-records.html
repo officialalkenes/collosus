@@ -26,25 +26,27 @@
                 <thead>
                     <tr class='small'>
                         <th>Amount</th>
+                        <th>Owner</th>
                         <th>Transaction Id</th>
                         <th>Status</th>
                         <th>Deposited Wallet</th>
                         <th>Created</th>
-                        <th>Upload Deposit Proof</th>
+                        <th>Deposit Proof</th>
                         {% if request.user.is_superuser %}
-                        <th>Update Deposit Request</th>
+                        <th>Update Deposit </th>
                         {% endif %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for data in deposits %}
                     <tr class='small'>
+                        <td >{{data.user}}</td>
                         <td >{{data.amount}}</td>
                         <td>{{data.trx}}</td>
                         <td>{{data.status}}</td>
                         <td>{{data.wallet_address}}</td>
                         <td>{{data.created}}</td>
-                        <td><a href="{{data.get_absolute_url}}" class="btn-md btn-primary rounded-1 mt-2 p-2 small">Deposit Proof</a></td>
+                        <td><a href="{{data.get_absolute_url}}" class="btn-md btn-primary rounded-1 mt-2 p-1 small">Deposit Proof</a></td>
 
                         {% if request.user.is_superuser and data.status == "Pending" %}
                         <td>

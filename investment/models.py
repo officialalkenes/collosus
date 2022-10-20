@@ -44,31 +44,19 @@ class PaymentMethod(models.TextChoices):
     TRX = "Tron Address", _("Tron Address")
 
 
-class InvestmentTypes(models.Model):
-    investment_type = models.CharField(
-        max_length=30,
-        blank=True,
-        verbose_name=_("Investment Type"),
-        choices=Type.choices,
-    )
-
-    def __str__(self):
-        return f"{self.investment_type}"
-
-    class Meta:
-        verbose_name_plural = "Investment Types"
-        verbose_name = "Investment Type"
-
-
-class Investment(TimeStampedUUIDModels):
+class Investment(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="investment"
     )
     trxid = models.CharField(max_length=10, blank=True)
-    investment_type = models.ForeignKey(
-        InvestmentTypes, on_delete=models.CASCADE, related_name="investment_types"
+    slug = models.CharField(max_length=14, blank=True)
+    investment_type = models.CharField(
+        max_length=30,
+        blank=True,
+        choices=Type.choices,
+        verbose_name=_("Investment Type"),
     )
-    amount = models.DecimalField(blank=True, max_digits=8, decimal_places=2)
+    amount = models.DecimalField(blank=True, null=True, max_digits=8, decimal_places=2)
     percentage = models.DecimalField(
         blank=True, null=True, max_digits=3, decimal_places=2
     )
@@ -81,9 +69,14 @@ class Investment(TimeStampedUUIDModels):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     completed = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return f"{self.user.username} - {self.investment_type}"
+
+    def get_admin_url(self):
+        return reverse("investicon:admin-investment-update", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):
         N = 10
@@ -91,25 +84,30 @@ class Investment(TimeStampedUUIDModels):
             self.trxid = "".join(
                 random.choice(string.ascii_letters + string.digits) for _ in range(N)
             )
+        if self.slug == "":
+            self.slug = slugify(self.trxid)
 
         if self.investment_type == "Basic":
             self.amount = 200
             self.total_days = 7
             self.percentage = 0.15
-            self.total_percentage = self.percentage * self.total_days
+            self.total_percentage = self.percentage * float(self.total_days)
 
         if self.investment_type == "Limited":
             self.total_days = 7
             self.percentage = 0.20
+            self.total_percentage = self.percentage * float(self.total_days)
 
         if self.investment_type == "Unlimited":
             self.total_days = 7
             self.percentage = 0.20
+            self.total_percentage = self.percentage * float(self.total_days)
 
         if self.investment_type == "Individual Retirement Account":
             self.amount = 500
             self.total_days = 14
             self.percentage = 0.35
+            self.total_percentage = self.percentage * float(self.total_days)
 
         if self.status == Status.Successful and self.total_days is not None:
             total_days = int(self.total_days)

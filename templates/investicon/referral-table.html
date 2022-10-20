@@ -3,10 +3,12 @@
 {% load static %}
 
 {% block content %}
-    <ul>
+    {% comment %} <ul>
+        {% if total_ref %}
     {% for user in total_ref %}
     <li> {{user}} </li>
     {% endfor %}
-    </ul>
-    {{ref_balance}}
+    {% endif %}
+</ul> {% endcomment %}
+
 {% endblock content %}

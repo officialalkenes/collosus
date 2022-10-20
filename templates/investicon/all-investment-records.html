@@ -11,16 +11,16 @@
             <div class="card shadow mb-4">
                 <div
                 class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Withdrawal Records</h6>
+                <h6 class="m-0 font-weight-bold text-primary">All Investment Records</h6>
             </div>
 
     <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Withdrawal Records</h6>
+        <h6 class="m-0 font-weight-bold text-primary">All Investment Records</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            {% if withdrawal %}
+            {% if records %}
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
@@ -30,12 +30,12 @@
                         <th>Wallet Address</th>
                         <th>Created</th>
                         {% if request.user.is_superuser %}
-                            <th>Update Deposit Request</th>
+                            <th>Update Investment Status</th>
                         {% endif %}
                     </tr>
                 </thead>
                 <tbody>
-                    {% for data in withdrawal %}
+                    {% for data in records %}
                     <tr>
                         <td>{{data.amount}}</td>
                         <td>{{data.trx}}</td>
