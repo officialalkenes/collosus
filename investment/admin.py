@@ -29,11 +29,10 @@ class WithdrawalAdmin(admin.ModelAdmin):
 
 @admin.register(Investment)
 class InvestmentAdmin(admin.ModelAdmin):
-    list_display = ["amount", "user", "investment_type", "profit", "total_percentage"]
+    list_display = ["amount", "user", "profit", "total_percentage"]
     list_display_links = [
         "amount",
         "user",
-        "investment_type",
         "profit",
         "total_percentage",
     ]

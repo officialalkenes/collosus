@@ -33,12 +33,27 @@ urlpatterns = [
     # Withdrawals and Records
     path(
         "admin-withdrawal-records/",
-        views.admin_widthrawal_records,
+        views.admin_withdrawal_records,
         name="admin-withdrawal-records",
     ),
     path("create-withdrawal/", views.withdrawal_create, name="create-withdrawal"),
     path("withdrawal-records/", views.withdrawal_records, name="withdrawal-records"),
+    path(
+        "admin-withdrawal-update/<str:slug>/",
+        views.admin_update_withdrawal_view,
+        name="admin-withdrawal-update",
+    ),
     # Investments and Records
+    path(
+        "admin-investment-update/<str:slug>/",
+        views.admin_update_investment_view,
+        name="admin-withdrawal-update",
+    ),
+    path(
+        "admin-investment-records/",
+        views.admin_investment_records,
+        name="admin-withdrawal-records",
+    ),
     path("investment-records/", views.investment_records, name="investment-records"),
     path("basic-invest/", views.create_basic_investment, name="basic-invest"),
     path("limited-invest/", views.limited_invest_now, name="limited-invest"),

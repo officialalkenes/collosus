@@ -28,6 +28,9 @@ class BasicInvestmentForm(forms.ModelForm):
         model = Investment
         fields = ("amount",)
 
+    def clean(self):
+        pass
+
 
 class LimitedInvestmentForm(forms.ModelForm):
     amount = forms.DecimalField(max_value=999, min_value=300)

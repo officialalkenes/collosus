@@ -10,6 +10,7 @@ from django.contrib.sites.shortcuts import get_current_site
 
 
 from django.db.models import Sum
+from django.db.transaction import atomic
 
 from django.shortcuts import redirect, render, get_object_or_404
 
@@ -32,7 +33,13 @@ from investment.forms import (
 
 from .mixins import AdminRequiredMixin
 
-from investment.models import Deposit, Investment, InvestmentType, Portfolio, Withdrawal
+from investment.models import (
+    Deposit,
+    Investment,
+    InvestmentTypes,
+    Portfolio,
+    Withdrawal,
+)
 from profiles.models import Profile
 
 User = get_user_model()
@@ -128,10 +135,11 @@ class UpdateDeposit(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
 admin_update_deposit_view = UpdateDeposit.as_view()
 
 
-class UpdateWithdrawal(AdminRequiredMixin, UpdateView):
-    model = Withdrawal
-    fields = ("amount", "payment", "status")
-    template_name = "investicon/admin-deposit.html"
+class UpdateInvestment(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Investment
+    fields = ("amount", "profit", "complete", "status" "start_date", "end_date")
+
+    template_name = "investicon/admin-investments.html"
     success_message = "Your Withrawal request has been updated successfully!"
 
     def form_valid(self, form):
@@ -139,6 +147,30 @@ class UpdateWithdrawal(AdminRequiredMixin, UpdateView):
         amount = form.instance.amount
         profile = Profile.objects.filter(user=user).first()
         if form.instance.status == "Successful":
+            profile.balance += amount
+            profile.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("investicon:investment-records")
+
+
+admin_update_investment_view = UpdateInvestment.as_view()
+
+
+class UpdateWithdrawal(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Withdrawal
+    fields = ("amount", "address", "status")
+    template_name = "investicon/admin-withdrawal.html"
+    success_message = "Your Withrawal request has been updated successfully!"
+
+    @atomic
+    def form_valid(self, form):
+        user = form.instance.user
+        amount = form.instance.amount
+        profile = Profile.objects.get(user=user)
+        balance = profile.balance
+        if form.instance.status == "Successful" and balance >= amount:
             profile.balance -= amount
             profile.save()
         return super().form_valid(form)
@@ -150,7 +182,7 @@ class UpdateWithdrawal(AdminRequiredMixin, UpdateView):
 admin_update_withdrawal_view = UpdateWithdrawal.as_view()
 
 
-class UpdateInvestment(AdminRequiredMixin, UpdateView):
+class UpdateInvestment(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Investment
     fields = ("amount", "status")
     template_name = "investicon/admin-deposit.html"
@@ -189,7 +221,7 @@ def update_deposit_view(request, slug):
     return render(request, "investicon/update-deposit.html", context)
 
 
-class CreateWithdrawal(LoginRequiredMixin, CreateView):
+class CreateWithdrawal(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Withdrawal
     fields = ("amount",)
     template_name = "investicon/withdrawal.html"
@@ -221,9 +253,14 @@ def create_basic_investment(request):
                 Investment.objects.create(
                     user=user,
                     amount=amount,
-                    investment_type="Basic",
-                    total_days=7,
                     percentage=0.15,
+                    total_days=7,
+                    profit=0.00,
+                    total_percentage=7 * 0.15,
+                    status="Pending",
+                    investment_type=InvestmentTypes.objects.filter(
+                        investment_type="Basic"
+                    ).first(),
                 )
                 profile.balance -= amount
                 profile.save()
@@ -374,7 +411,7 @@ def ira_invest_now(request):
 def admin_investment_records(request):
     investments = Investment.objects.all()
     context = {"investments": investments}
-    return render(request, "investicon/admin_investment.html", context)
+    return render(request, "investicon/all-investment-records.html", context)
 
 
 @login_required
@@ -425,15 +462,6 @@ def admin_withdrawal_records(request):
 
 
 @login_required
-def admin_widthrawal_records(request):
-    withdrawal_records = Withdrawal.objects.filter(user=request.user)
-    context = {
-        "withdrawal": withdrawal_records,
-    }
-    return render(request, "investicon/deposit-records.html", context)
-
-
-@login_required
 def user_profile(request):
     user = request.user
     try:
@@ -458,30 +486,14 @@ def my_referrals(request):
     return render(request, "investicon/referral-table.html", context)
 
 
-# class UpdateWithdrawal(LoginRequiredMixin, UpdateView):
-#     model = Withdrawal
-#     fields = ("amount", "payment", "status")
-#     template_name = "investicon/withdrawal.html"
-#     success_message = "Your Withrawal request has been updated successfully!"
-
-#     def form_valid(self, form):
-#         return super().form_valid(form)
-
-#     def get_success_url(self):
-#         return reverse("investment:withdrawal-records")
-
-
-# withdrawal_create = CreateWithdrawal.as_view()
-
-
-class UpdateDeposit(LoginRequiredMixin, UpdateView):
+class UpdateDeposit(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Deposit
     fields = ("amount", "payment", "status")
     template_name = "investicon/deposit.html"
     success_message = "Your Deposit request has been updated successfully!"
 
 
-class UpdateInvestment(LoginRequiredMixin, UpdateView):
+class UpdateInvestment(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Deposit
     fields = ("amount", "payment", "status")
     template_name = "investicon/deposit.html"
@@ -512,3 +524,19 @@ def withdraw_investment_request(request, pk):
             return redirect("investment:investment-records")
     context = {"investment": investment}
     return render(request, "", context)
+
+
+# class UpdateWithdrawal(LoginRequiredMixin, UpdateView):
+#     model = Withdrawal
+#     fields = ("amount", "payment", "status")
+#     template_name = "investicon/withdrawal.html"
+#     success_message = "Your Withrawal request has been updated successfully!"
+
+#     def form_valid(self, form):
+#         return super().form_valid(form)
+
+#     def get_success_url(self):
+#         return reverse("investment:withdrawal-records")
+
+
+# withdrawal_create = CreateWithdrawal.as_view()

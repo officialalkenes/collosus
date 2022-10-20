@@ -25,7 +25,7 @@ class TimeStampedUUIDModels(models.Model):
         abstract = True
 
 
-class InvestmentType(models.TextChoices):
+class Type(models.TextChoices):
     Basic = "Basic", _("Basic Plan")
     Limited = "Limited", _("Limited Plan")
     Unlimited = "Unlimited", _("Unlimited Plan")
@@ -49,7 +49,7 @@ class InvestmentTypes(models.Model):
         max_length=30,
         blank=True,
         verbose_name=_("Investment Type"),
-        choices=InvestmentType.choices,
+        choices=Type.choices,
     )
 
     def __str__(self):
@@ -65,11 +65,8 @@ class Investment(TimeStampedUUIDModels):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="investment"
     )
     trxid = models.CharField(max_length=10, blank=True)
-    investment_type = models.CharField(
-        max_length=30,
-        blank=True,
-        verbose_name=_("Investment Type"),
-        choices=InvestmentType.choices,
+    investment_type = models.ForeignKey(
+        InvestmentTypes, on_delete=models.CASCADE, related_name="investment_types"
     )
     amount = models.DecimalField(blank=True, max_digits=8, decimal_places=2)
     percentage = models.DecimalField(
@@ -99,6 +96,7 @@ class Investment(TimeStampedUUIDModels):
             self.amount = 200
             self.total_days = 7
             self.percentage = 0.15
+            self.total_percentage = self.percentage * self.total_days
 
         if self.investment_type == "Limited":
             self.total_days = 7

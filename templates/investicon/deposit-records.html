@@ -20,6 +20,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
+            {% include 'messages.html' %}
             {% if deposits %}
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
@@ -49,7 +50,7 @@
                         <td>
                             <a href="{{data.get_admin_url}}" class="btn-md btn-secondary rounded-1 mt-2 p-2 small">Update Deposit </a>
                         </td>
-                        {% else %}
+                        {% elif request.user.is_superuser %}
                             <td class="center">Deposit Updated Already</td>
                         {% endif %}
                     </tr>
