@@ -46,7 +46,9 @@ class PaymentMethod(models.TextChoices):
 
 class Investment(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="investment"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="investment",
     )
     trxid = models.CharField(max_length=10, blank=True)
     slug = models.CharField(max_length=14, blank=True)
@@ -58,7 +60,7 @@ class Investment(models.Model):
     )
     amount = models.DecimalField(blank=True, null=True, max_digits=8, decimal_places=2)
     percentage = models.DecimalField(
-        blank=True, null=True, max_digits=3, decimal_places=2
+        blank=True, max_digits=3, decimal_places=2, null=True
     )
     total_percentage = models.DecimalField(default=0.00, max_digits=3, decimal_places=2)
     total_days = models.PositiveIntegerField(blank=True, null=True)
@@ -73,7 +75,7 @@ class Investment(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.user.username} - {self.investment_type}"
+        return f"{self.investment_type}"
 
     def get_admin_url(self):
         return reverse("investicon:admin-investment-update", kwargs={"slug": self.slug})

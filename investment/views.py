@@ -136,9 +136,9 @@ admin_update_deposit_view = UpdateDeposit.as_view()
 
 class UpdateInvestment(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Investment
-    fields = ("amount", "profit", "complete", "status" "start_date", "end_date")
+    fields = ("amount", "profit", "completed", "status", "start_date", "end_date")
 
-    template_name = "investicon/admin-investments.html"
+    template_name = "investicon/admin-investment.html"
     success_message = "Your Withrawal request has been updated successfully!"
 
     def form_valid(self, form):
@@ -181,28 +181,6 @@ class UpdateWithdrawal(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
 admin_update_withdrawal_view = UpdateWithdrawal.as_view()
 
 
-class UpdateInvestment(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = Investment
-    fields = ("amount", "status")
-    template_name = "investicon/admin-deposit.html"
-    success_message = "Your Withrawal request has been updated successfully!"
-
-    def form_valid(self, form):
-        user = form.instance.user
-        amount = form.instance.amount
-        profile = Profile.objects.filter(user=user).first()
-        if form.instance.status == "Successful":
-            profile.balance -= amount
-            profile.save()
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse("investicon:admin-investment-records")
-
-
-admin_update_investment_view = UpdateInvestment.as_view()
-
-
 # Deposit Proof
 @login_required
 def update_deposit_view(request, slug):
@@ -240,62 +218,154 @@ class CreateWithdrawal(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 withdrawal_create = CreateWithdrawal.as_view()
 
 
-class CreateBasicInvestment(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    model = Investment
-    fields = ("amount",)
-    template_name = "investicon/basic-investment.html"
-    success_message = "You have successfully subscribed to basic investment!"
+# class CreateBasicInvestment(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+#     model = Investment
+#     fields = ("amount",)
+#     template_name = "investicon/basic-investment.html"
+#     success_message = "You have successfully subscribed to basic investment!"
 
-    def form_valid(self, form):
-        user = self.request.user
-        amount = form.instance.amount
-        form.instance.status = "Successful"
-        profile = Profile.objects.filter(user=user).first()
-        if form.instance.status == "Successful" and amount <= profile.balance:
-            profile.balance -= amount
-            profile.save()
-        return super().form_valid(form)
+#     def form_valid(self, form):
+#         user = self.request.user
+#         amount = form.instance.amount
+#         form.instance.status = "Successful"
+#         form.instance.user = user
+#         profile = Profile.objects.filter(user=user).first()
+#         if form.instance.status == "Successful" and amount <= profile.balance:
+#             profile.balance -= amount
+#             profile.save()
+#         return super().form_valid(form)
 
-    def get_success_url(self):
-        return reverse("investicon:withdrawal-records")
+#     def get_success_url(self):
+#         return reverse("investicon:withdrawal-records")
 
 
-create_basic_investment = CreateBasicInvestment.as_view()
+# create_basic_investment = CreateBasicInvestment.as_view()
+@login_required
+def create_basic_investment(request):
+    form = BasicInvestmentForm()
+    user = request.user
+    if request.method == "POST":
+        form = BasicInvestmentForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data.get("amount")
+            profile = Profile.objects.get(user=user)
+            if profile.balance >= amount:
+                Investment.objects.create(
+                    user=user,
+                    amount=float(amount),
+                    status="Successful",
+                    investment_type="Basic",
+                )
+                profile.balance -= amount
+                profile.save()
+                messages.success(
+                    request,
+                    "You Have Successfully Subscribe to the basic investment plan",
+                )
+                return redirect("investicon:investment-records")
+            else:
+                messages.error(
+                    request, "Your account balance is lower than your deposit plan"
+                )
+                return redirect("investicon:basic-invest")
+    context = {"form": form}
+    return render(request, "investicon/basic-investment.html", context)
 
-# def create_basic_investment(request):
-#     form = BasicInvestmentForm()
-#     if request.method == "POST":
-#         form = BasicInvestmentForm(request.POST)
-#         if form.is_valid():
-#             amount = form.cleaned_data.get("amount")
-#             user = request.user
-#             profile = Profile.objects.get(user=user)
-#             if profile.balance >= amount:
-#                 Investment.objects.create(
-#                     user=user,
-#                     amount=amount,
-#                     percentage=0.15,
-#                     total_days=7,
-#                     profit=0.00,
-#                     total_percentage=7 * 0.15,
-#                     status="Pending",
-#                     investment_type = "Basic"
-#                 )
-#                 profile.balance -= amount
-#                 profile.save()
-#                 form.save()
-#                 messages.success(
-#                     request,
-#                     "You Have Successfully Subscribe to the basic investment plan",
-#                 )
-#                 return redirect("investment:investment-records")
-#             else:
-#                 messages.error(
-#                     request, "Your account balance is lower than your deposit plan"
-#                 )
-#                 return redirect("investicon:basic-invest")
-#     context = {"form": form}
-#     return render(request, "investicon/basic-investment.html", context)
+
+@login_required
+def create_limited_investment(request):
+    form = BasicInvestmentForm()
+    user = request.user
+    if request.method == "POST":
+        form = BasicInvestmentForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data.get("amount")
+            profile = Profile.objects.get(user=user)
+            if profile.balance >= amount:
+                Investment.objects.create(
+                    user=user,
+                    amount=float(amount),
+                    status="Successful",
+                    investment_type="Limited",
+                )
+                profile.balance -= amount
+                profile.save()
+                messages.success(
+                    request,
+                    "You Have Successfully Subscribe to the Limited Investment plan",
+                )
+                return redirect("investicon:investment-records")
+            else:
+                messages.error(
+                    request, "Your account balance is lower than your Investment plan"
+                )
+                return redirect("investicon:limited-invest")
+    context = {"form": form}
+    return render(request, "investicon/basic-investment.html", context)
+
+
+@login_required
+def create_ira_investment(request):
+    form = IraInvestmentForm()
+    user = request.user
+    if request.method == "POST":
+        form = IraInvestmentForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data.get("amount")
+            profile = Profile.objects.get(user=user)
+            if profile.balance >= amount:
+                Investment.objects.create(
+                    user=user,
+                    amount=float(amount),
+                    status="Successful",
+                    investment_type="Ira",
+                )
+                profile.balance -= amount
+                profile.save()
+                messages.success(
+                    request,
+                    "You Have Successfully Subscribe to the Ira investment plan",
+                )
+                return redirect("investicon:investment-records")
+            else:
+                messages.error(
+                    request, "Your account balance is lower than your Investment plan"
+                )
+                return redirect("investicon:limited-invest")
+    context = {"form": form}
+    return render(request, "investicon/ira-investment.html", context)
+
+
+@login_required
+def create_unlimited_investment(request):
+    form = UnlimitedInvestmentForm()
+    user = request.user
+    if request.method == "POST":
+        form = UnlimitedInvestmentForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data.get("amount")
+            profile = Profile.objects.get(user=user)
+            if profile.balance >= amount:
+                Investment.objects.create(
+                    user=user,
+                    amount=float(amount),
+                    status="Successful",
+                    investment_type="Basic",
+                )
+                profile.balance -= amount
+                profile.save()
+                messages.success(
+                    request,
+                    "You Have Successfully Subscribe to the Unlimited investment plan",
+                )
+                return redirect("investicon:investment-records")
+            else:
+                messages.error(
+                    request, "Your account balance is lower than your deposit plan"
+                )
+                return redirect("investicon:unlimited-invest")
+    context = {"form": form}
+    return render(request, "investicon/unlimited-investment.html", context)
 
 
 def update_investment(request, pk):
@@ -424,8 +494,6 @@ def ira_invest_now(request):
 
 
 # Records
-
-
 @login_required
 def admin_investment_records(request):
     records = Investment.objects.all()

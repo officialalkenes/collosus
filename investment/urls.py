@@ -56,8 +56,10 @@ urlpatterns = [
     ),
     path("investment-records/", views.investment_records, name="investment-records"),
     path("basic-invest/", views.create_basic_investment, name="basic-invest"),
-    path("limited-invest/", views.limited_invest_now, name="limited-invest"),
-    path("unlimited-invest/", views.unlimited_invest_now, name="unlimited-invest"),
+    path("limited-invest/", views.create_limited_investment, name="limited-invest"),
+    path(
+        "unlimited-invest/", views.create_unlimited_investment, name="unlimited-invest"
+    ),
     path("basic-invest/", views.create_basic_investment, name="basic-invest"),
     path("basic-invest/", views.create_basic_investment, name="basic-invest"),
 ]

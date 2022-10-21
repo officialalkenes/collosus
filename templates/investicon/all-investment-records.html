@@ -1,6 +1,5 @@
 {% extends 'investicon/dashboard.html' %}
 
-{% load static %}
 
 {% block content %}
 
@@ -24,6 +23,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
+                        <th>User</th>
                         <th>Amount</th>
                         <th>Transaction Id</th>
                         <th>Status</th>
@@ -37,17 +37,22 @@
                 <tbody>
                     {% for data in records %}
                     <tr>
+                        <td>{{data.user}}</td>
                         <td>{{data.amount}}</td>
-                        <td>{{data.trx}}</td>
+                        <td>{{data.trxid}}</td>
                         <td>{{data.status}}</td>
-                        <td>{{data.address}}</td>
+                        {% if data.address %}
+                            <td>{{data.address}}</td>
+                        {% else %}
+                        <td>
+                            <button href="{{request.user.get_absolute_url}}" class="btn-md btn-secondary rounded-1 mt-2 p-1 small">Add Address </button>
+                        </td>
+                        {% endif %}
                         <td>{{data.created}}</td>
-                        {% if request.user.is_superuser and data.status == "Pending" %}
+                        {% if request.user.is_superuser %}
                         <td>
                             <a href="{{data.get_admin_url}}" class="btn-md btn-secondary rounded-1 mt-2 p-2 small">Update Withdrawal </a>
                         </td>
-                        {% else %}
-                            <td class="center">Withdrawal Updated Already</td>
                         {% endif %}
                     </tr>
                     {% endfor %}

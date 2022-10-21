@@ -12,16 +12,16 @@ def items(request):
     current_site = get_current_site(request)
 
     try:
-        user = request.user
-        profile = Profile.objects.filter(user=user)
-        investments = Investment.objects.filter(user=user, status="Successful")
-        total = len(investments)
+        # user = request.user
+        profile = Profile.objects.filter()
+        # investments = Investment.objects.filter(user=user, status="Successful")
+        # total = len(investments)
     except Profile.DoesNotExist or Profile.MultipleObjectsReturned:
-        user = None
+        # user = None
         profile = None
     return {
         "now": now,
         "current_site": current_site,
         "profile": profile,
-        "total": total,
+        # "total": total,
     }
