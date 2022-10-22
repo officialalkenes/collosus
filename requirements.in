@@ -11,10 +11,12 @@ colorama==0.4.5
 crispy-bootstrap5==0.7
 distlib==0.3.6
 Django==4.0
+django-anymail==8.6
 django-cloudinary-storage==0.3.0
 django-countries==7.4.2
 django-crispy-forms==1.14.0
 django-jazzmin==2.5.0
+django-phonenumber-field==7.0.0
 filelock==3.8.0
 flake8==4.0.1
 identify==2.5.6

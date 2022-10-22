@@ -167,3 +167,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
 AUTHENTICATION_BACKENDS = ["users.backends.EmailBackend"]  # new
+
+EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
+
+ANYMAIL = {
+    "SENDINBLUE_API_KEY": "<your v3 API key>",
+}
+
+SENDINBLUE_API_KEY = os.environ.get("SENDINBLUE_API_URL", "")
+ANYMAIL = {
+    # (exact settings here depend on your ESP...)  # your Mailgun domain, if needed
+    "SENDINBLUE_API_KEY": SENDINBLUE_API_KEY,
+}
+
+SENDINBLUE_API_URL = "https://api.sendinblue.com/v3/"
