@@ -44,6 +44,7 @@ THIRD_PARTY_APPS = [
     "django_countries",
     "crispy_forms",
     "crispy_bootstrap5",
+    "anymail",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
@@ -170,14 +171,9 @@ AUTHENTICATION_BACKENDS = ["users.backends.EmailBackend"]  # new
 
 EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
 
-ANYMAIL = {
-    "SENDINBLUE_API_KEY": "<your v3 API key>",
-}
+SENDINBLUE_API_URL = "https://api.sendinblue.com/v3/"
 
-SENDINBLUE_API_KEY = os.environ.get("SENDINBLUE_API_URL", "")
 ANYMAIL = {
     # (exact settings here depend on your ESP...)  # your Mailgun domain, if needed
-    "SENDINBLUE_API_KEY": SENDINBLUE_API_KEY,
+    "SENDINBLUE_API_KEY": config("SENDINBLUE_API_KEY"),
 }
-
-SENDINBLUE_API_URL = "https://api.sendinblue.com/v3/"

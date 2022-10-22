@@ -7,7 +7,7 @@ def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect(
-                reverse("investment:dashboard")
+                reverse("investicon:dashboard")
             )  # Change the redirect url in your project
         else:
             return view_func(request, *args, **kwargs)

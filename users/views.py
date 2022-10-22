@@ -199,93 +199,41 @@ def handle_server_error(request):
 @unauthenticated_user
 def signup_page(request):
     form = RegistrationForm()
-    try:
-        profile_id = request.session.get("ref_profile")
-    except Error as e:
-        print(e)
-        profile_id = None
-    print(profile_id)
-    if profile_id is not None:
-        if request.method == "POST":
-            form = RegistrationForm(request.POST)
-            if form.is_valid():
-                user = form.save(commit=False)
-                user.is_active = False
-                registered_user = User.objects.get(id=user.id)
-                reg_profile = Profile.objects.get(user=registered_user)
-                recommended_by_profile = Profile.objects.get(pkid=profile_id)
-                # updated user referred by
-                reg_profile.recommended_by = recommended_by_profile.user
-                # Referral is reimbursed and update
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            to_email = form.cleaned_data.get("email")
+            current_site = get_current_site(request)
+            mail_subject = "Account Activation"
+            response = send_user_email(
+                user,
+                mail_subject,
+                to_email,
+                current_site,
+                "users/email_verification.html",
+            )
+            if response == "success":
+                messages.success(
+                    request,
+                    "We have sent you an activation link in your email. Please confirm your"
+                    "email before continuing Your Registration Process. Check your spam folder if you don't receive it",
+                )
+                return redirect("accounts:login")
+            else:
+                messages.error(
+                    request,
+                    "An error occurred. Please ensure you have good internet connection and you have entered a valid email address",
+                )
+                user.delete()
+        else:
+            if form.errors:
+                for field in form:
+                    for error in field.errors:
+                        messages.error(request, error)
+            form = RegistrationForm()
 
-                recommended_by_profile.balance += 15.00
-                user.save()
-                recommended_by_profile.save()
-                reg_profile.save()
-                to_email = form.cleaned_data.get("email")
-                current_site = get_current_site(request)
-                mail_subject = "Account Activation"
-                response = send_user_email(
-                    user,
-                    mail_subject,
-                    to_email,
-                    current_site,
-                    "users/email_verification.html",
-                )
-                if response == "success":
-                    messages.success(
-                        request,
-                        "We have sent you an activation link in your email. Please confirm your"
-                        "email before continuing Your Registration Process. Check your spam folder if you don't receive it",
-                    )
-                    return redirect("accounts:login")
-                else:
-                    messages.error(
-                        request,
-                        "An error occurred. Please ensure you have good internet connection and you have entered a valid email address",
-                    )
-                    user.delete()
-            else:
-                if form.errors:
-                    for field in form:
-                        for error in field.errors:
-                            messages.error(request, error)
-                form = RegistrationForm()
-    else:
-        if request.method == "POST":
-            form = RegistrationForm(request.POST)
-            if form.is_valid():
-                user = form.save(commit=False)
-                user.is_active = False
-                user.save()
-                to_email = form.cleaned_data.get("email")
-                current_site = get_current_site(request)
-                mail_subject = "Account Activation"
-                response = send_user_email(
-                    user,
-                    mail_subject,
-                    to_email,
-                    current_site,
-                    "users/email_verification.html",
-                )
-                if response == "success":
-                    messages.success(
-                        request,
-                        "We have sent you an activation link in your email. Please confirm your"
-                        "email before continuing Your Registration Process. Check your spam folder if you don't receive it",
-                    )
-                    return redirect("accounts:login")
-                else:
-                    messages.error(
-                        request,
-                        "An error occurred. Please ensure you have good internet connection and you have entered a valid email address",
-                    )
-                    user.delete()
-            else:
-                if form.errors:
-                    for field in form:
-                        for error in field.errors:
-                            messages.error(request, error)
-                form = RegistrationForm()
     context = {"form": form}
     return render(request, "users/signup.html", context)
