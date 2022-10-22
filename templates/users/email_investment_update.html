@@ -1,0 +1,12 @@
+{% autoescape off %}
+
+Hello {{ user.username }},
+
+Your Investment profit for ${{amount}} has been allocated to your profits record.
+Your potential withdrawable investment has been updated.
+Your Investment Balance is now ${{total}}.
+
+Click the link below to check your account.
+http://{{ domain }}{% url 'investicon:dashboard' %}
+
+{% endautoescape %}

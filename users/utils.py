@@ -26,5 +26,22 @@ def send_user_email(user, mail_subject, to_email, current_site, template):
         return "error"
 
 
-def reimburse_recommended_by_balance(self):
-    pass
+def send_investment_update(
+    user, mail_subject, amount, email, profit, total, template, end_date, current_site
+):
+    message = render_to_string(
+        template,
+        {
+            "user": user,
+            "domain": current_site.domain,
+            "amount": amount,
+            "profit": profit,
+            "total": total,
+            "end_date": end_date,
+        },
+    )
+    try:
+        send_mail(mail_subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+        return "success"
+    except (ConnectionAbortedError, SMTPException, gaierror):
+        return "error"

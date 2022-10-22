@@ -172,6 +172,7 @@ def activate_account_page(request, uidb64, token):
         return redirect("accounts:login")
 
 
+@login_required
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
@@ -179,9 +180,9 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, "Your password was successfully updated!")
-            return redirect("bank:dashboard")
+            logout(request)
         else:
-            messages.error(request, "Please correct the error below.")
+            messages.error(request, "Invalid Details. Please Try Again")
     else:
         form = PasswordChangeForm(request.user)
     return render(request, "users/change_password.html", {"form": form})

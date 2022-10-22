@@ -2,69 +2,124 @@
 
 {% load static %}
 
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+body{
+    font-family: 'Open Sans', sans-serif;
+
+}
+.search{
+
+  top:6px;
+  left:10px;
+}
+
+.form-control{
+
+    border:none;
+    padding-left:32px;
+}
+
+.form-control:focus{
+
+    border:none;
+    box-shadow:none;
+}
+
+.green{
+
+    color:green;
+}
+</style>
+
 {% block content %}
                     <div class="row">
-
-                        <!-- Area Chart -->
                         <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Mini Account Statement</h6>
-                                        <p class="m-0 font-weight-normal text-primary">All Deposits Records are shown below   </p>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Amount</th>
-                                                        <th>Status</th>
-                                                        <th>Created</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% if portfolio %}
-                                                    {% for data in portfolio %}
-                                                    <tr>
-                                                        <td>${{data.balance}}</td>
-                                                        <td>{{data.status}}</td>
-                                                        <td>{{data.created}}</td>
-                                                    </tr>
-                                                    {% endfor %}
-                                                    {% else %}
-                                                    <p> You Have no Transaction Records yet </p>
-                                                    {% endif %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div style="height:560px; background-color: #1D2330; overflow:hidden; box-sizing: border-box; border: 1px solid #282E3B; border-radius: 4px; text-align: right; line-height:14px; font-size: 12px; font-feature-settings: normal; text-size-adjust: 100%; box-shadow: inset 0 -20px 0 0 #262B38;padding:1px;padding: 0px; margin: 0px; width: 100%;"><div style="height:540px; padding:0px; margin:0px; width: 100%;"><iframe src="https://widget.coinlib.io/widget?type=chart&theme=dark&coin_id=859&pref_coin_id=1505" width="100%" height="536px" scrolling="auto" marginwidth="0" marginheight="0" frameborder="0" border="0" style="border:0;margin:0;padding:0;line-height:14px;"></iframe></div><div style="color: #626B7F; line-height: 14px; font-weight: 400; font-size: 11px; box-sizing: border-box; padding: 2px 6px; width: 100%; font-family: Verdana, Tahoma, Arial, sans-serif;"><a href="https://coinlib.io" target="_blank" style="font-weight: 500; color: #626B7F; text-decoration:none; font-size:11px">Cryptocurrency Prices</a>&nbsp;by Coinlib</div></div>
+                            <br>
 
+                            <div style="height:433px; background-color: #1D2330; overflow:hidden; box-sizing: border-box; border: 1px solid #282E3B; border-radius: 4px; text-align: right; line-height:14px; font-size: 12px; font-feature-settings: normal; text-size-adjust: 100%; box-shadow: inset 0 -20px 0 0 #262B38; padding: 0px; margin: 0px; width: 100%;"><div style="height:413px; padding:0px; margin:0px; width: 100%;"><iframe src="https://widget.coinlib.io/widget?type=full_v2&theme=dark&cnt=6&pref_coin_id=1505&graph=yes" width="100%" height="409px" scrolling="auto" marginwidth="0" marginheight="0" frameborder="0" border="0" style="border:0;margin:0;padding:0;"></iframe></div><div style="color: #626B7F; line-height: 14px; font-weight: 400; font-size: 11px; box-sizing: border-box; padding: 2px 6px; width: 100%; font-family: Verdana, Tahoma, Arial, sans-serif;"><a href="https://coinlib.io" target="_blank" style="font-weight: 500; color: #626B7F; text-decoration:none; font-size:11px">Cryptocurrency Prices</a>&nbsp;by Coinlib</div></div>
                         </div>
-
-
-                        <div class="col-lg-4 mb-4">
-
-                            <!-- Illustrations -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-danger">Fraud Alert</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-center">
-                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 20rem; height: 10rem;"
-                                            src="{% static 'img/warning.svg' %}" alt="...">
-                                    </div>
-                                    <p><strong class='text-primary'>Cloud World Bank</strong> Will never ask you for your online bank details through email or phone number, Flee from such messages and requests.
-                                        Stay protected always, should you notice any suspicious activities on your account? Reach out to us Through support the widget</p>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
 
                 </div>
                 <!-- /.container-fluid -->
+                <div class="container mt-5 px-2">
 
+                    <div class="mb-2 d-flex justify-content-between align-items-center">
+
+                    </div>
+                    <div class="table-responsive">
+                    <table class="table table-responsive table-borderless">
+
+                      <thead>
+                        <tr class="bg-light">
+                          <th scope="col" width="5%"><input class="form-check-input" type="checkbox"></th>
+                          <th scope="col" width="5%">#</th>
+                          <th scope="col" width="20%">Date</th>
+                          <th scope="col" width="10%">Status</th>
+                          <th scope="col" width="20%">Customer</th>
+                          <th scope="col" width="20%">Purchased</th>
+                          <th scope="col" class="text-end" width="20%"><span>Revenue</span></th>
+                        </tr>
+                      </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row"><input class="form-check-input" type="checkbox"></th>
+                      <td>12</td>
+                      <td>1 Oct, 21</td>
+                      <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">Paid</span></td>
+                      <td><img src="https://i.imgur.com/VKOeFyS.png" width="25"> Althan Travis</td>
+                      <td>Wirecard for figma</td>
+                      <td class="text-end"><span class="fw-bolder">$0.99</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
+                    </tr>
+
+                    <tr>
+                      <th scope="row"><input class="form-check-input" type="checkbox"></th>
+                      <td>14</td>
+                      <td>12 Oct, 21</td>
+                      <td><i class="fa fa-dot-circle-o text-danger"></i><span class="ms-1">Failed</span></td>
+                      <td><img src="https://i.imgur.com/nmnmfGv.png" width="25"> Tomo arvis</td>
+                      <td>Altroz furry</td>
+                      <td class="text-end"><span class="fw-bolder">$0.19</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
+                    </tr>
+
+
+                    <tr>
+                      <th scope="row"><input class="form-check-input" type="checkbox"></th>
+                      <td>17</td>
+                      <td>1 Nov, 21</td>
+                      <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">Paid</span></td>
+                      <td><img src="https://i.imgur.com/VKOeFyS.png" width="25"> Althan Travis</td>
+                      <td>Apple Macbook air</td>
+                      <td class="text-end"><span class="fw-bolder">$1.99</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
+                    </tr>
+
+
+                    <tr>
+                      <th scope="row"><input class="form-check-input" type="checkbox"></th>
+                      <td>90</td>
+                      <td>19 Oct, 21</td>
+                      <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">Paid</span></td>
+                      <td><img src="https://i.imgur.com/VKOeFyS.png" width="25"> Travis head</td>
+                      <td>Apple Macbook Pro</td>
+                      <td class="text-end"><span class="fw-bolder">$9.99</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
+                    </tr>
+
+
+                    <tr>
+                      <th scope="row"><input class="form-check-input" type="checkbox"></th>
+                      <td>12</td>
+                      <td>1 Oct, 21</td>
+                      <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">Paid</span></td>
+                      <td><img src="https://i.imgur.com/nmnmfGv.png" width="25"> Althan Travis</td>
+                      <td>Wirecard for figma</td>
+                      <td class="text-end"><span class="fw-bolder">$0.99</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                  </div>
+
+                </div>
 {% endblock content %}
