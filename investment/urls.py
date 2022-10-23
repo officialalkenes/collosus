@@ -61,5 +61,5 @@ urlpatterns = [
         "unlimited-invest/", views.create_unlimited_investment, name="unlimited-invest"
     ),
     path("basic-invest/", views.create_basic_investment, name="basic-invest"),
-    path("basic-invest/", views.create_basic_investment, name="basic-invest"),
+    path("ira-invest/", views.ira_invest_now, name="ira-invest"),
 ]

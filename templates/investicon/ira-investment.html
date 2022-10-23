@@ -1,0 +1,80 @@
+{% extends 'investicon/dashboard.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row">
+
+    <!-- Area Chart -->
+    <div class="col-xl-4 col-lg-4">
+
+    </div>
+        <div class="col-xl-4 col-lg-4">
+        <div class="card shadow mb-4">
+            <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Limited Investment</h6>
+        </div>
+
+<div class="card shadow mb-4">
+<div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Invest Now</h6>
+</div>
+<div class="card-body">
+    <div class="table-responsive">
+        <form action='' method='POST'>
+            {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+            {% csrf_token %}
+            <div class="box bg-primary m-4 p-4 text-white">
+                <h3>Limited Plan</h3>
+                <h4><sup>$</sup>300 and Above<span></span></h4>
+                <ul>
+                  <li><i class="bx bx-check"></i>20% ROI in 7 days</li>
+                  <li><i class="bx bx-check"></i> Daily Investment Update</li>
+                  <li><i class="bx bx-check"></i>$15 referral bonus on registration</li>
+                  <li><i class="bx bx-check"></i>Anti Fraud Protection</li>
+                  <li class=""><i class="bx bx-check"></i> 24/7 Customer Care Support </li>
+                </ul>
+              </div>
+              <div class="d-flex justify-content-center">
+                  {{form|crispy}}
+              </div>
+              <div class="d-flex justify-content-center  mt-4">
+                <button type="submit" class="btn btn-primary d-flex justify-content-center">Invest</button>
+              </div>
+        </form>
+
+    </div>
+</div>
+</div>
+</div>
+</div>
+        <div class="col-xl-4 col-lg-7">
+            <div class="card shadow mb-4">
+                <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-danger">Important Notice</h6>
+            </div>
+            <div class=''>
+                <div class='centered'>
+                    <h6 class='text-secondary'> Limited Investment is a range Investment be sure to have $300 or above in your Portfolio before Investing.For Further Enquiries, Contact Our Support Team
+                    <span class='text-info font-weight-bold'> <a href="{% url 'investicon:investment-records' %}" class="d-none d-sm-inline-block shadow-md">
+                        through this Link </a>
+                    </span>
+                     Or Reach out to us Through the <span class='text-info font-weight-bold'>Chat Support widget.</span></h6>
+
+                    </div>
+            </div>
+
+    </div>
+</div>
+</div>
+
+
+{% endblock content %}

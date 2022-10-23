@@ -1,6 +1,5 @@
 from datetime import datetime, date
 from http.client import HTTPResponse
-from msilib.schema import Error
 from xml.dom import ValidationErr
 from django.contrib.messages.views import SuccessMessageMixin
 
@@ -498,7 +497,7 @@ def ira_invest_now(request):
                 messages.error(f"You need {remainder} to invest in this plan")
                 return redirect("investment:deposit")
     context = {"form": form}
-    return render(request, "investicon/create-investment.html", context)
+    return render(request, "investicon/ira-investment.html", context)
 
 
 # Records
@@ -559,8 +558,8 @@ def user_profile(request):
     user = request.user
     try:
         profiler = Profile.objects.filter(user=user)
-    except Error as e:
-        print(e)
+    except ValidationErr:
+        pass
     context = {
         "profiler": profiler,
     }
