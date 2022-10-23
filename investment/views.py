@@ -157,13 +157,20 @@ class UpdateInvestment(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
 admin_update_investment_view = UpdateInvestment.as_view()
 
 
+# @login_required
+# def withdraw_investment(request):
+#     investments = Investment.objects.filter(
+#         user=request.user,
+#         completed=True,
+#     )
+
+
 class UpdateWithdrawal(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Withdrawal
     fields = ("amount", "address", "status")
     template_name = "investicon/admin-withdrawal.html"
     success_message = "Your Withrawal request has been updated successfully!"
 
-    @atomic
     def form_valid(self, form):
         user = form.instance.user
         amount = form.instance.amount

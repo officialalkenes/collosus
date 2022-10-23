@@ -135,3 +135,16 @@ class UpdateDepositForm(forms.ModelForm):
             "amount",
             "status",
         )
+
+
+class WithdrawInvestmentForm(forms.ModelForm):
+    class Meta:
+        model = Investment
+        fields = (
+            "trx",
+            "payment",
+            "proof",
+            "wallet_address",
+            "amount",
+            "status",
+        )

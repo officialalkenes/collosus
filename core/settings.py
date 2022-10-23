@@ -174,6 +174,6 @@ EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
 SENDINBLUE_API_URL = "https://api.sendinblue.com/v3/"
 
 ANYMAIL = {
-    # (exact settings here depend on your ESP...)  # your Mailgun domain, if needed
+    # (exact settings here depend on your ESP...)  # your Sendininblue domain, if needed
     "SENDINBLUE_API_KEY": config("SENDINBLUE_API_KEY"),
 }
