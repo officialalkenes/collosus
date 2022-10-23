@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from http.client import HTTPResponse
 from msilib.schema import Error
+from xml.dom import ValidationErr
 from django.contrib.messages.views import SuccessMessageMixin
 
 from django.contrib import messages
@@ -50,8 +51,8 @@ def homepage_ref(request, *args, **kwargs):
         profile = Profile.objects.get(code=code)
         print("profile")
         request.session["ref_profile"] = str(profile.pkid)
-    except Error as e:
-        print(e)
+    except ValidationErr:
+        pass
 
     print(request.session.get_expiry_age())
 
