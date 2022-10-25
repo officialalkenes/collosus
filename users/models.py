@@ -60,6 +60,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_absolute_url(self):
         return reverse("accounts:profile-updating", args=[str(self.id)])
 
+    def get_wallet_url(self):
+        return reverse("accounts:wallet-updating", args=[str(self.id)])
+
 
 class UserActivity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

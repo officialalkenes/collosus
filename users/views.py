@@ -1,6 +1,4 @@
 from datetime import timedelta
-from msilib.schema import Error
-
 from django.conf import settings
 
 from django.contrib.auth import views as auth_views
@@ -31,7 +29,7 @@ from profiles.models import Profile
 from .models import LoginAttempt, User, UserActivity
 
 from .decorators import unauthenticated_user
-from .forms import LoginForm, RegistrationForm, UserEditForm, UserForm
+from .forms import LoginForm, RegistrationForm, UserEditForm, UserForm, WalletUpdateForm
 from .token import account_activation_token
 from .utils import send_user_email
 
@@ -123,10 +121,28 @@ def user_update(request, pk):
             messages.success(
                 request, "User Profile Information Has been Updated Successfully"
             )
-            return redirect("investment:user-profiles")
+            return redirect("investicon:user-profiles")
 
     context["form"] = form
     return render(request, "users/create-profiles.html", context)
+
+
+@login_required
+def wallet_update(request, pk):
+    context = {}
+    obj = get_object_or_404(Profile, id=pk)
+    form = WalletUpdateForm()
+    if request.method == "POST":
+        form = WalletUpdateForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request, "Btc Wallet Information Has been Updated Successfully"
+            )
+            return redirect("investicon:dashboard")
+
+    context["form"] = form
+    return render(request, "users/update-wallet.html", context)
 
 
 @login_required

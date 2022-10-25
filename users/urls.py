@@ -19,6 +19,7 @@ from .views import (
     user_update,
     logout_view,
     signup_page,
+    wallet_update,
     # referral_view,
 )
 
@@ -30,6 +31,7 @@ urlpatterns = [
     path("signup/", signup_page, name="signup"),
     # path("<str:code>/", referral_view, name="ref-view"),
     path("<pk>/profile-updating/", user_update, name="profile-updating"),
+    path("<pk>/wallet-updating/", wallet_update, name="wallet-updating"),
     path(
         "activate/<slug:uidb64>/<slug:token>/", activate_account_page, name="activate"
     ),

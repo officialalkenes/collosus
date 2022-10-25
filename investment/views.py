@@ -76,18 +76,26 @@ def dashboard(request):
         user = request.user
         profiling = Profile.objects.filter(user=user)
         deposits = Deposit.objects.filter(user=user)
-        current_site = get_current_site(request)
         withdrawal = Withdrawal.objects.filter(user=user)
-        # profile = Profile.objects.get(user=user)
-        # ref_balance = profile.get_total_ref_balance()
+        investments = Investment.objects.filter(
+            user=user, status="Successful", completed=False
+        )
+        amount = investments.aggregate(sum=Sum("amount"))["sum"] or 0
+        profits = investments.aggregate(sum=Sum("profit"))["sum"] or 0
+        net_total = profits + amount
+        if len(investments) < 1:
+            total = 0
+        else:
+            total = len(investments)
+
     except Profile.MultipleObjectsReturned or Deposit.MultipleObjectsReturned or Withdrawal.MultipleObjectsReturned:
         pass
     context = {
         "profiling": profiling,
         "deposits": deposits,
         "withdrawal": withdrawal,
-        "current_site": current_site,
-        # 'ref_balance': ref_balance,
+        "total": total,
+        "net_total": net_total,
     }
     return render(request, "investicon/index.html", context)
 
@@ -145,8 +153,10 @@ class UpdateInvestment(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
         user = form.instance.user
         amount = form.instance.amount
         profile = Profile.objects.filter(user=user).first()
-        if form.instance.status == "Successful":
+        if form.instance.completed is True:
+            profit = form.instance.profit
             profile.balance += amount
+            profile.balance += profit
             profile.save()
         return super().form_valid(form)
 
@@ -281,10 +291,10 @@ def create_basic_investment(request):
 
 @login_required
 def create_limited_investment(request):
-    form = BasicInvestmentForm()
+    form = LimitedInvestmentForm()
     user = request.user
     if request.method == "POST":
-        form = BasicInvestmentForm(request.POST)
+        form = LimitedInvestmentForm(request.POST)
         if form.is_valid():
             amount = form.cleaned_data.get("amount")
             profile = Profile.objects.get(user=user)

@@ -31,26 +31,26 @@ class Command(BaseCommand):
                         balance = investment.profit
                         profile.balance += balance
                         profile.save()
-                        mail_subject = "Successful Withdrawal Update"
-                        amount = investment.amount
-                        profit = investment.profit
-                        email = user.email
-                        total = amount + profit
-                        end_date = investment.end_date
+                        # mail_subject = "Successful Withdrawal Update"
+                        # amount = investment.amount
+                        # profit = investment.profit
+                        # email = user.email
+                        # total = amount + profit
+                        # end_date = investment.end_date
                         self.stdout.write(
                             f"User {user.username}'s Investment Updated successfully!"
                         )
 
-                        send_investment_update(
-                            user,
-                            mail_subject,
-                            amount,
-                            email,
-                            profit,
-                            total,
-                            end_date,
-                            current_site,
-                            "users/email_investment_update.html",
-                        )
+                        # send_investment_update(
+                        #     user,
+                        #     mail_subject,
+                        #     amount,
+                        #     email,
+                        #     profit,
+                        #     total,
+                        #     end_date,
+                        #     current_site,
+                        #     "users/email_investment_update.html",
+                        # )
                 except Investment.DoesNotExist:
                     pass

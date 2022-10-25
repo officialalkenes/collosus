@@ -14,6 +14,8 @@ from django.contrib.auth.forms import (
 
 from django.core.exceptions import ValidationError
 
+from profiles.models import Profile
+
 from .models import UserActivity, User
 
 
@@ -298,3 +300,9 @@ class UserForm(forms.ModelForm):
             "firstname",
             "lastname",
         ]
+
+
+class WalletUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ("btc_wallet",)
