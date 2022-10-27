@@ -27,13 +27,7 @@ def send_user_email(user, mail_subject, to_email, current_site, template):
 
 
 def send_investment_update(
-    user,
-    mail_subject,
-    amount,
-    email,
-    profit,
-    total,
-    template,  # end_date
+    user, mail_subject, amount, email, profit, total, end_date, template
 ):
     message = render_to_string(
         template,
@@ -42,7 +36,7 @@ def send_investment_update(
             "amount": amount,
             "profit": profit,
             "total": float(total),
-            # "end_date": end_date,
+            "end_date": end_date,
         },
     )
     try:
