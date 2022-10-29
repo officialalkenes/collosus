@@ -97,3 +97,34 @@ class Profile(models.Model):
                 print(e)
             self.code = code
         return super().save(*args, **kwargs)
+
+
+# To be stored in router.py
+class LegacyRouter:
+    def db_for_read(self, model, **hints):
+        if model._meta.app_label == "legacy":
+            return "legacy"
+        return None
+
+    def db_for_write(self, model, **hints):
+        if model._meta.app_label == "legacy":
+            return "legacy"
+        return None
+
+
+# Add router to settings.py
+DATABASE_ROUTER = "app.router.LegacyRouter"
+
+
+# Run this code on terminal after
+# py manage.py inspectdb --databse=legacy > models.py
+
+"""
+
+    Create a custom management command and
+
+"""
+
+# Dump data command
+
+# python manage.py dumpdata --natural-foreign --natural-primary -e contenttypes -e auth.Permission --indent 2 > dump.json
