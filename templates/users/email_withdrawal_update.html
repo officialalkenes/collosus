@@ -1,0 +1,13 @@
+{% autoescape off %}
+
+Hello {{ user.username }},
+
+You Withdrawak of ${{amount}} has just been processed and deposited to your desired wallet address.
+Your available balance is now {{balance}}.
+
+Thanks for having trust in us..
+
+Click the link below to check your account.
+https://www.cryptocollossus.com/{% url 'investicon:dashboard' %}
+
+{% endautoescape %}

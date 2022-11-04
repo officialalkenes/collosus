@@ -30,6 +30,7 @@ from investment.forms import (
     IraInvestmentForm,
     UpdateDepositForm,
 )
+from users.utils import send_withdrawal_update
 
 from .mixins import AdminRequiredMixin
 
@@ -183,12 +184,23 @@ class UpdateWithdrawal(AdminRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def form_valid(self, form):
         user = form.instance.user
+        email = user.email
         amount = form.instance.amount
         profile = Profile.objects.get(user=user)
         balance = profile.balance
         if form.instance.status == "Successful" and balance >= amount:
             profile.balance -= amount
+            balance = profile.balance
             profile.save()
+            subject = "Withdrawal Update"
+            send_withdrawal_update(
+                user,
+                subject,
+                amount,
+                email,
+                balance,
+                "users/email_withdrawal_update.html",
+            )
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -224,8 +236,11 @@ class CreateWithdrawal(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         user = self.request.user
         profile = Profile.objects.filter(user=user).first()
-        form.instance.user = user
-        form.instance.address = profile.btc_wallet
+        amount = form.instance.amount
+        if profile.balance >= amount:
+            form.instance.user = user
+            form.instance.address = profile.btc_wallet
+            form.save()
         return super().form_valid(form)
 
     def get_success_url(self):

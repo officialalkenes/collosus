@@ -44,3 +44,19 @@ def send_investment_update(
         return "success"
     except (ConnectionAbortedError, SMTPException, gaierror):
         return "error"
+
+
+def send_withdrawal_update(user, subject, amount, email, balance, template):
+    message = render_to_string(
+        template,
+        {
+            "user": user,
+            "amount": amount,
+            "balance": balance,
+        },
+    )
+    try:
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+        return "success"
+    except (ConnectionAbortedError, SMTPException, gaierror):
+        return "error"
